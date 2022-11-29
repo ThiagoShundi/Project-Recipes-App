@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Switch } from 'react-router-dom';
 import Login from './pages/Login';
 import DoneRecipes from './pages/DoneRecipes';
@@ -22,7 +21,6 @@ function App() {
       <Route path="/drinks/:id" />
       <Route path="/meals/:id/in-progress" />
       <Route path="/drinks/:id/in-progress" />
-
     </Switch>
   );
 }
