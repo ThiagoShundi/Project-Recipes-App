@@ -12,9 +12,9 @@ function App() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="/donerecipes" component={ DoneRecipes } />
+      <Route path="/done-recipes" component={ DoneRecipes } />
       <Route path="/drinks" component={ Drinks } />
-      <Route path="/favoriterecipes" component={ FavoriteRecipes } />
+      <Route path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route path="/meals" component={ Meals } />
       <Route path="/profile" component={ Profile } />
       <Route path="/meals/:id" />

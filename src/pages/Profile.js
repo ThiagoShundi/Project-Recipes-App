@@ -1,9 +1,11 @@
+import React from 'react';
+import HeaderNoSearch from '../components/HeaderNoSearch';
 import Footer from '../components/Footer';
 
 function Profile() {
   return (
     <>
-      <h1>Profile</h1>
+      <HeaderNoSearch title="Profile" />
       <Footer />
     </>
   );
