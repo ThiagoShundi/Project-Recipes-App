@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 function Profile() {
@@ -8,7 +9,9 @@ function Profile() {
       <h1>Profile</h1>
       <span>E-mail: </span>
       <p data-testid="profile-email">{getEmail}</p>
-      <button type="button" data-testid="profile-done-btn">Done Recipes</button>
+      <Link to="/done-recipes">
+        <button type="button" data-testid="profile-done-btn">Done Recipes</button>
+      </Link>
       <button type="button" data-testid="profile-favorite-btn">Favorite Recipes</button>
       <button type="button" data-testid="profile-logout-btn">Logout</button>
       <Footer />
