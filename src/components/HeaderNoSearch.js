@@ -8,7 +8,7 @@ function Header({ title }) {
     <header>
       <h1 data-testid="page-title">{title}</h1>
       <Link to="/profile">
-        <button
+        <img
           type="button"
           data-testid="profile-top-btn"
           src={ profileIcon }
