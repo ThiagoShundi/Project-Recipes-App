@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import React from 'react';
+import HeaderNoSearch from '../components/HeaderNoSearch';
 import Footer from '../components/Footer';
 
 function Profile() {
@@ -29,6 +31,7 @@ function Profile() {
           Logout
         </button>
       </Link>
+      <HeaderNoSearch title="Profile" />
       <Footer />
     </>
   );
