@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import profileIcon from '../images/profileIcon.svg';
 
 function Header({ title }) {
   return (
@@ -10,7 +11,7 @@ function Header({ title }) {
         <button
           type="button"
           data-testid="profile-top-btn"
-          src="src/images/profileIcon.svg"
+          src={ profileIcon }
           alt="Profile"
         />
       </Link>
