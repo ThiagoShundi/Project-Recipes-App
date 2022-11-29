@@ -11,4 +11,4 @@ function Drinks() {
   );
 }
 
-export default Meals;
+export default Drinks;
