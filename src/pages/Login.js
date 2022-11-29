@@ -16,7 +16,7 @@ function Login() {
       email: formEmail,
     };
     localStorage.setItem('user', JSON.stringify(user));
-    history.push('');
+    history.push('/meals');
   };
 
   return (
