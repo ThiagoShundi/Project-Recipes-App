@@ -1,3 +1,5 @@
+import Footer from '../components/Footer';
+
 function Profile() {
   const getEmail = JSON.parse(localStorage.getItem('user')).email;
 
@@ -9,6 +11,7 @@ function Profile() {
       <button type="button" data-testid="profile-done-btn">Done Recipes</button>
       <button type="button" data-testid="profile-favorite-btn">Favorite Recipes</button>
       <button type="button" data-testid="profile-logout-btn">Logout</button>
+      <Footer />
     </>
   );
 }
