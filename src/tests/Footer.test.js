@@ -1,12 +1,13 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import Meals from '../pages/Meals';
 import Drinks from '../pages/Drinks';
 import Profile from '../pages/Profile';
+import { renderWithRouter } from './helpers/renderWith';
 
 describe('Testes do Footer', () => {
   test('O footer no Meals', () => {
-    render(<Meals />);
+    renderWithRouter(<Meals />);
     const drinksIcons = screen.getByTestId(/drinks-bottom-btn/i);
     const mealsIcons = screen.getByTestId(/meals-bottom-btn/i);
     expect(drinksIcons).toBeInTheDocument();
@@ -14,7 +15,7 @@ describe('Testes do Footer', () => {
   });
 
   test('O footer no drinks', () => {
-    render(<Drinks />);
+    renderWithRouter(<Drinks />);
     const drinksIcons = screen.getByTestId(/drinks-bottom-btn/i);
     const mealsIcons = screen.getByTestId(/meals-bottom-btn/i);
     expect(drinksIcons).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe('Testes do Footer', () => {
   });
 
   test('O footer no profile', () => {
-    render(<Profile />);
+    renderWithRouter(<Profile />);
     const drinksIcons = screen.getByTestId(/drinks-bottom-btn/i);
     const mealsIcons = screen.getByTestId(/meals-bottom-btn/i);
     expect(drinksIcons).toBeInTheDocument();

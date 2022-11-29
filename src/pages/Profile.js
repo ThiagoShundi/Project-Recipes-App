@@ -2,7 +2,12 @@ import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 function Profile() {
-  const getEmail = JSON.parse(localStorage.getItem('user')).email;
+  const getEmail = localStorage
+    .getItem('user') ? JSON.parse(localStorage.getItem('user')).email : '';
+
+  const clearLocalStorage = () => {
+    localStorage.clear();
+  };
 
   return (
     <>
@@ -15,7 +20,15 @@ function Profile() {
       <Link to="/favorite-recipes">
         <button type="button" data-testid="profile-favorite-btn">Favorite Recipes</button>
       </Link>
-      <button type="button" data-testid="profile-logout-btn">Logout</button>
+      <Link to="/">
+        <button
+          type="button"
+          data-testid="profile-logout-btn"
+          onClick={ clearLocalStorage }
+        >
+          Logout
+        </button>
+      </Link>
       <Footer />
     </>
   );
