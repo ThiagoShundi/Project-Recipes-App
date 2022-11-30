@@ -1,6 +1,11 @@
+import React from 'react';
+import HeaderNoSearch from '../components/HeaderNoSearch';
+
 function FavoriteRecipes() {
   return (
-    <h1>Favorite Recipes</h1>
+    <div>
+      <HeaderNoSearch title="Favorite Recipes" />
+    </div>
   );
 }
 

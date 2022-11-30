@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { React, useEffect, useState } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { fetchDrinks } from '../services/fetchRecipes';
 import Loading from '../components/Loading';
 import '../styles/Drinks.css';
@@ -23,11 +25,11 @@ export default function Drinks() {
 
   return (
     <div className="drinks-page">
+      <Header title="Drinks" />
       <ButtonDrinks />
       <ButtonMeals />
       {isLoading && <Loading />}
       {error && <p>{error}</p>}
-      <h1>Drinks</h1>
       {
         error
           ? global.alert('Sorry, we haven\'t found any recipes for these filters.')
@@ -46,6 +48,7 @@ export default function Drinks() {
             </div>
           ))
       }
+      <Footer />
     </div>
   );
 }
