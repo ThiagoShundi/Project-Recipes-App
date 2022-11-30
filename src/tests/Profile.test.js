@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event';
 import Profile from '../pages/Profile';
 import { renderWithRouter } from './helpers/renderWith';
 
-describe('Testes do Footer', () => {
+describe('Testes do Profile', () => {
   localStorage.setItem('user', JSON.stringify({ email: 'teste@trybe.com' }));
-  test('O footer no profile', () => {
+  test('Se os elementos estão na página', () => {
     renderWithRouter(<Profile />);
     const email = screen.getByText(/teste@trybe.com/i);
     const doneRecipes = screen.getByText(/Done Recipes/i);
@@ -17,7 +17,7 @@ describe('Testes do Footer', () => {
     expect(favoriteRecipes).toBeInTheDocument();
     expect(logout).toBeInTheDocument();
   });
-  test('O footer no profile', () => {
+  test('Se ao apertar o botão de Logout o localStorage é limpo', () => {
     renderWithRouter(<Profile />);
     const logout = screen.getByText(/Logout/i);
     expect(logout).toBeInTheDocument();

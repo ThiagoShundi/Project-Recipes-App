@@ -44,7 +44,7 @@ function Header({ title }) {
         loadSearch && (
           <>
             <ButtonSearch />
-            <SearchBar />
+            <SearchBar title={ title } />
           </>
         )
       }
