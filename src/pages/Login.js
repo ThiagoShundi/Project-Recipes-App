@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { createBrowserHistory } from 'history';
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [formEmail, setFormEmail] = useState('');
   const [password, setPassword] = useState('');
-  const history = createBrowserHistory();
 
   const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const emailValidation = formEmail.match(emailRegex);
@@ -16,7 +15,6 @@ function Login() {
       email: formEmail,
     };
     localStorage.setItem('user', JSON.stringify(user));
-    history.push('/meals');
   };
 
   return (
@@ -34,15 +32,16 @@ function Login() {
         placeholder="Password"
         onChange={ (event) => setPassword(event.target.value) }
       />
-      <button
-        type="button"
-        data-testid="login-submit-btn"
-        disabled={ !(emailValidation && passwordValidation) }
-        onClick={ saveSubmition }
-      >
-        Enter
-
-      </button>
+      <Link to="/meals">
+        <button
+          type="button"
+          data-testid="login-submit-btn"
+          disabled={ !(emailValidation && passwordValidation) }
+          onClick={ saveSubmition }
+        >
+          Enter
+        </button>
+      </Link>
     </div>
   );
 }

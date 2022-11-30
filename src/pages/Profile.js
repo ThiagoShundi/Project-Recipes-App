@@ -13,7 +13,7 @@ function Profile() {
 
   return (
     <>
-      <h1>Profile</h1>
+      <HeaderNoSearch title="Profile" />
       <span>E-mail: </span>
       <p data-testid="profile-email">{getEmail}</p>
       <Link to="/done-recipes">
@@ -31,7 +31,6 @@ function Profile() {
           Logout
         </button>
       </Link>
-      <HeaderNoSearch title="Profile" />
       <Footer />
     </>
   );
