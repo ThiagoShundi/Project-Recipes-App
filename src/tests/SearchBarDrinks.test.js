@@ -8,6 +8,13 @@ const searchTopBtn = 'search-top-btn';
 const searchInputConst = 'search-input';
 const exercSearchBtn = 'exec-search-btn';
 
+const mockOneDrink = { drinks: [{
+  strDrink: 'Adam Sunrise',
+  strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/vtuyvu1472812112.jpg',
+  idDrink: '15567',
+}],
+};
+
 describe('Testes do Drinks', () => {
   test('Se os elementos estão na página', () => {
     renderWithRouter(<Drinks />);
@@ -30,7 +37,7 @@ describe('Testes do Drinks', () => {
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve(mockOneDrink),
         ok: true,
       }));
     userEvent.type(searchInput, 'water');
@@ -51,7 +58,7 @@ describe('Testes do Drinks', () => {
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve(mockOneDrink),
         ok: true,
       }));
     userEvent.type(searchInput, 'water');
@@ -72,7 +79,7 @@ describe('Testes do Drinks', () => {
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve(mockOneDrink),
         ok: true,
       }));
     userEvent.type(searchInput, 'r');
@@ -92,7 +99,7 @@ describe('Testes do Drinks', () => {
     jest.spyOn(global, 'alert');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve(mockOneDrink),
         ok: true,
       }));
     userEvent.type(searchInput, 'water');

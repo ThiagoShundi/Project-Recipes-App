@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
 function SearchBar({ title }) {
-//   const [isLoading, setIsLoading] = useState(false);
+  const [redirectIdMeal, setRedirectIdMeal] = useState(false);
+  const [idMeal, setIdMeal] = useState('');
+  const [redirectIdDrink, setRedirectIdDrink] = useState(false);
+  const [idDrink, setIdDrink] = useState('');
+  if (redirectIdMeal) return <Redirect to={ `/meals/${idMeal}` } />;
+  if (redirectIdDrink) return <Redirect to={ `/drinks/${idDrink}` } />;
 
-  //   const title = document.getElementsByTagName('h1')[0].innerText;
   const fetchApiMeals = async () => {
     let http = '';
     const radios = document.getElementsByName('type');
@@ -21,7 +26,10 @@ function SearchBar({ title }) {
     if (http.length > 0) {
       const response = await fetch(http);
       const repos = await response.json();
-      console.log(repos);
+      if ((repos) && (repos.meals.length === 1)) {
+        setIdMeal(repos.meals[0].idMeal);
+        setRedirectIdMeal(true);
+      }
     } else {
       global.alert('Your search must have only 1 (one) character');
     }
@@ -43,6 +51,10 @@ function SearchBar({ title }) {
     if (http.length > 0) {
       const response = await fetch(http);
       const repos = await response.json();
+      if (repos.drinks.length === 1) {
+        setIdDrink(repos.drinks[0].idDrink);
+        setRedirectIdDrink(true);
+      }
       console.log(repos);
     } else {
       global.alert('Your search must have only 1 (one) character');

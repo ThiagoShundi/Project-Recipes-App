@@ -35,7 +35,7 @@ describe('Testes do Meats', () => {
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({ riceMock }),
+        json: () => Promise.resolve(riceMock),
         ok: true,
       }));
     userEvent.type(searchInput, 'rice');
@@ -57,7 +57,7 @@ describe('Testes do Meats', () => {
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({ riceMock }),
+        json: () => Promise.resolve(riceMock),
         ok: true,
       }));
     userEvent.type(searchInput, 'rice');
@@ -78,7 +78,7 @@ describe('Testes do Meats', () => {
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({ riceMock }),
+        json: () => Promise.resolve(riceMock),
         ok: true,
       }));
     userEvent.type(searchInput, 'r');
@@ -98,7 +98,7 @@ describe('Testes do Meats', () => {
     jest.spyOn(global, 'alert');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
-        json: () => Promise.resolve({ riceMock }),
+        json: () => Promise.resolve(riceMock),
         ok: true,
       }));
     userEvent.type(searchInput, 'rice');
