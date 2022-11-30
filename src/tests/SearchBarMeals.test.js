@@ -9,6 +9,13 @@ const searchTopBtn = 'search-top-btn';
 const searchInputConst = 'search-input';
 const exercSearchBtn = 'exec-search-btn';
 
+const mockOneMeal = { meals: [{
+  strMeal: 'Beef Banh Mi Bowls with Sriracha Mayo, Carrot & Pickled Cucumber',
+  strMealThumb: 'https://www.themealdb.com/images//media//meals//z0ageb1583189517.jpg',
+  idMeal: '52997',
+}],
+};
+
 describe('Testes do Meats', () => {
   test('Se os elementos estão na página', async () => {
     renderWithRouter(<Meals />);
@@ -28,10 +35,6 @@ describe('Testes do Meats', () => {
     const searchInput = screen.getByTestId(searchInputConst);
     const ingredient = screen.getByText(/Ingredient/i);
     expect(ingredient).toBeInTheDocument();
-    // const name = screen.getByText(/Name/i);
-    // expect(name).toBeInTheDocument();
-    // const firstLetter = screen.getByText(/First Letter/i);
-    // expect(firstLetter).toBeInTheDocument();
     jest.spyOn(global, 'fetch');
     global.fetch = jest.fn()
       .mockResolvedValue(Promise.resolve({
@@ -107,5 +110,26 @@ describe('Testes do Meats', () => {
     const btnSearchFetch = screen.getByTestId(exercSearchBtn);
     userEvent.click(btnSearchFetch);
     expect(global.alert).toHaveBeenCalled();
+  });
+  test('Se muda o endereço', async () => {
+    const { history } = renderWithRouter(<Meals />);
+
+    const btnSearch = screen.getByTestId(searchTopBtn);
+    userEvent.click(btnSearch);
+    const searchInput = screen.getByTestId(searchInputConst);
+    const ingredient = screen.getByText(/Ingredient/i);
+    expect(ingredient).toBeInTheDocument();
+    jest.spyOn(global, 'fetch');
+    global.fetch = jest.fn()
+      .mockResolvedValue(Promise.resolve({
+        json: () => Promise.resolve(mockOneMeal),
+        ok: true,
+      }));
+    userEvent.type(searchInput, 'rice');
+    const radioIngredient = screen.getByTestId('ingredient-search-radio');
+    radioIngredient.checked = true;
+    const btnSearchFetch = screen.getByTestId(exercSearchBtn);
+    userEvent.click(btnSearchFetch);
+    expect(history.location.pathname).toBe('/');
   });
 });
