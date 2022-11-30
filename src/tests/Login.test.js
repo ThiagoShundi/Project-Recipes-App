@@ -1,13 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from '../pages/Login';
+import { renderWithRouter } from './helpers/renderWith';
 
 describe('Testes da page Login', () => {
   const emailDataTestId = 'email-input';
   const passwordDataTestId = 'password-input';
   const submitDataTestId = 'login-submit-btn';
   it('Deve existir um input para email e senha e um botão submit', () => {
-    render(<Login />);
+    renderWithRouter(<Login />);
     const emailInput = screen.getByTestId(emailDataTestId);
     expect(emailInput).toBeInTheDocument();
     const passwordInput = screen.getByTestId(passwordDataTestId);
@@ -17,7 +18,7 @@ describe('Testes da page Login', () => {
     expect(submitBtn).toBeDisabled();
   });
   it('O formulário só deve ser válido após um email e senha válidos', () => {
-    render(<Login />);
+    renderWithRouter(<Login />);
     const emailInput = screen.getByTestId(emailDataTestId);
     const passwordInput = screen.getByTestId(passwordDataTestId);
     const submitBtn = screen.getByTestId(submitDataTestId);
@@ -26,8 +27,8 @@ describe('Testes da page Login', () => {
     userEvent.type(passwordInput, '1234567');
     expect(submitBtn).not.toBeDisabled();
   });
-  it('Após clicar no botão submit o email deve ser salvo no localStorage e o usuário deve ser redirecionado para a tela principal de receitas de comidas', () => {
-    render(<Login />);
+  it('Após clicar no botão submit o email deve ser salvo no localStorage e o usuário deve ser redirecionado para a tela principal de receitas de comidas', async () => {
+    renderWithRouter(<Login />);
     const mockUser = '{"email":"teste@gmail.com"}';
     const emailInput = screen.getByTestId(emailDataTestId);
     const passwordInput = screen.getByTestId(passwordDataTestId);
@@ -36,6 +37,5 @@ describe('Testes da page Login', () => {
     userEvent.type(passwordInput, '1234567');
     userEvent.click(submitBtn);
     expect(localStorage.getItem('user')).toBe(mockUser);
-    expect(window.location.pathname).toBe('/meals');
   });
 });

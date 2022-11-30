@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ButtonSearch from './ButtonSearch';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header({ title }) {
   const [loadSearch, setLoadSearch] = useState(false);
@@ -44,6 +45,7 @@ function Header({ title }) {
           <ButtonSearch />
         )
       }
+      <SearchBar />
     </header>
   );
 }
