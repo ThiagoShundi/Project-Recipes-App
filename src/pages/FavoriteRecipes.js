@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import HeaderNoSearch from '../components/HeaderNoSearch';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/FavoriteRecipe.css';
 
 function FavoriteRecipes() {
-  const getFavorites = localStorage
+  const getFavoritesLocalStorage = localStorage
     .getItem('favoriteRecipes') ? JSON
       .parse(localStorage.getItem('favoriteRecipes')) : [];
-  // console.log(getFavorites);
+
+  const [getFavorites, setGetFavorites] = useState(getFavoritesLocalStorage);
+  const unfavorite = ({ target }) => {
+    const newFavorites = getFavorites
+      .filter((_recipe, index) => index !== parseInt(target.name, 10));
+    setGetFavorites(newFavorites);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+    console.log(getFavorites);
+  };
 
   return (
     <div>
@@ -20,6 +28,7 @@ function FavoriteRecipes() {
         { getFavorites && (getFavorites.map((favoriteMeal, indexMeal) => (
           <li key={ indexMeal }>
             <img
+              className="imgRecipes"
               src={ favoriteMeal.image }
               alt="recipe"
               data-testid={ `${indexMeal}-horizontal-image` }
@@ -30,20 +39,28 @@ function FavoriteRecipes() {
               ) : `${favoriteMeal.alcoholicOrNot}` }
             </p>
             <p data-testid={ `${indexMeal}-horizontal-name` }>{ favoriteMeal.name }</p>
-            <button
-              type="button"
-              data-testid={ `${indexMeal}-horizontal-share-btn` }
-              src={ shareIcon }
-            >
-              <img src={ shareIcon } alt="icon share" />
-            </button>
-            <button
-              type="button"
-              data-testid={ `${indexMeal}-horizontal-favorite-btn` }
-              src={ blackHeartIcon }
-            >
-              <img src={ blackHeartIcon } alt="icon black heart" />
-            </button>
+            <div className="buttons">
+              <button
+                type="button"
+                data-testid={ `${indexMeal}-horizontal-share-btn` }
+                src={ shareIcon }
+              >
+                <img src={ shareIcon } alt="icon share" className="imgBtn" />
+              </button>
+              <button
+                type="button"
+                data-testid={ `${indexMeal}-horizontal-favorite-btn` }
+                src={ blackHeartIcon }
+                onClick={ (event) => unfavorite(event) }
+              >
+                <img
+                  name={ indexMeal }
+                  src={ blackHeartIcon }
+                  alt="icon black heart"
+                  className="imgBtn"
+                />
+              </button>
+            </div>
           </li>
         )))}
       </ul>

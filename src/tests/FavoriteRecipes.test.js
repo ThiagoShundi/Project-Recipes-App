@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 import { renderWithRouter } from './helpers/renderWith';
 
@@ -48,5 +49,23 @@ describe('Testes do Footer', () => {
 
     expect(favoriteRecipes).toBeInTheDocument();
     expect(imgProfile.src).toBe('http://localhost/profileIcon.svg');
+  });
+  test('Se é removido do localStorage após apertar no desfavoritar', () => {
+    window.localStorage.setItem('favoriteRecipes', JSON.stringify(mockLocalStorage));
+    renderWithRouter(<FavoriteRecipes />);
+    const nameMeal = screen.getByText(/Spicy Arrabiata Penne/i);
+    const nameDrink = screen.getByText(/Aquamarine/i);
+
+    expect(nameMeal).toBeInTheDocument();
+    expect(nameDrink).toBeInTheDocument();
+
+    const btnUnfavorite = screen.getAllByTestId(/-horizontal-favorite-btn/i);
+    userEvent.click(btnUnfavorite[0]);
+    // jest.spyOn(global, 'localStorage');
+    // expect(window.localStorage.getItem('favoriteRecipes')).toHaveBeenCalled();
+    // const getFavoritesLocalStorage = localStorage
+    // .getItem('favoriteRecipes') ? JSON
+    //   .parse(localStorage.getItem('favoriteRecipes')) : [];
+    //   console.log(window.localStorage.getItem('favoriteRecipes'));
   });
 });
