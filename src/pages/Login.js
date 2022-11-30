@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import '../styles/Login.css';
 
 function Login() {
   const [formEmail, setFormEmail] = useState('');
@@ -10,7 +11,7 @@ function Login() {
   const PASSWORD_LIMIT = 6;
   const passwordValidation = password.length > PASSWORD_LIMIT;
 
-  const saveSubmition = () => {
+  const saveSubmition = async () => {
     const user = {
       email: formEmail,
     };
@@ -18,18 +19,18 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="login-form">
       <h1>Login</h1>
       <input
         type="email"
         data-testid="email-input"
-        placeholder="Email"
+        placeholder="Email..."
         onChange={ (event) => setFormEmail(event.target.value) }
       />
       <input
         type="password"
         data-testid="password-input"
-        placeholder="Password"
+        placeholder="Password..."
         onChange={ (event) => setPassword(event.target.value) }
       />
       <Link to="/meals">

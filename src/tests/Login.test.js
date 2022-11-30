@@ -7,7 +7,7 @@ describe('Testes da page Login', () => {
   const emailDataTestId = 'email-input';
   const passwordDataTestId = 'password-input';
   const submitDataTestId = 'login-submit-btn';
-  it('Deve existir um input para email e senha e um botão submit', () => {
+  it('Deve existir um input para email e senha e um botão submit', async () => {
     renderWithRouter(<Login />);
     const emailInput = screen.getByTestId(emailDataTestId);
     expect(emailInput).toBeInTheDocument();

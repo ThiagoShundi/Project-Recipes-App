@@ -1,24 +1,51 @@
-// import React, { useState, useMemo, useEffect } from 'react';
-// import PropTypes from 'prop-types';
-// import RequestApiData from '../services/RequestApiData';
-// import AppContext from './AppContext';
+import React, { useMemo, useReducer } from 'react';
+import PropTypes from 'prop-types';
+import AppContext from './AppContext';
 
-// function AppProvider({ children }) {
+const INITIAL_STATE = {
+  data: [],
+  drinks: [],
+  meals: [],
+};
 
-//     const values = useMemo(() => ({})
+const dataReducer = (state, action) => {
+  switch (action.type) {
+  case 'DATA_FETCH_SUCCESS':
+    return {
+      ...state,
+      data: action.payload,
+    };
+  case 'SET_DRINKS':
+    return {
+      ...state,
+      drinks: action.payload,
+    };
+  case 'SET_MEALS':
+    return {
+      ...state,
+      meals: action.payload,
+    };
+  default:
+    return state;
+  }
+};
 
-//     return (
-//         <AppContext.Provider value={ values }>
-//           { children }
-//         </AppContext.Provider>
-//       );
-// }
+function AppProvider({ children }) {
+  const [state, dispatch] = useReducer(dataReducer, INITIAL_STATE);
+  const values = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
-// AppProvider.propTypes = {
-//     children: PropTypes.oneOfType([
-//       PropTypes.arrayOf(PropTypes.node),
-//       PropTypes.node,
-//     ]).isRequired,
-//   };
+  return (
+    <AppContext.Provider value={ values }>
+      { children }
+    </AppContext.Provider>
+  );
+}
 
-// export default AppProvider;
+AppProvider.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+};
+
+export default AppProvider;

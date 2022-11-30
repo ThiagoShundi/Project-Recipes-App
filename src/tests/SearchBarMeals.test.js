@@ -10,11 +10,11 @@ const searchInputConst = 'search-input';
 const exercSearchBtn = 'exec-search-btn';
 
 describe('Testes do Meats', () => {
-  test('Se os elementos estão na página', () => {
+  test('Se os elementos estão na página', async () => {
     renderWithRouter(<Meals />);
-    const meals = screen.getByText(/Meals/i);
-    const btnUser = screen.getByTestId('profile-top-btn');
-    const btnSearch = screen.getByTestId(searchTopBtn);
+    const meals = await screen.findByRole('heading', { level: 1, name: 'Meals' });
+    const btnUser = await screen.findByTestId('profile-top-btn');
+    const btnSearch = await screen.findByTestId(searchTopBtn);
 
     expect(meals).toBeInTheDocument();
     expect(btnUser).toBeInTheDocument();

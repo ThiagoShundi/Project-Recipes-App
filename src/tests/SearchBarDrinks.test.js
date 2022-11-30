@@ -16,11 +16,11 @@ const mockOneDrink = { drinks: [{
 };
 
 describe('Testes do Drinks', () => {
-  test('Se os elementos estão na página', () => {
+  test('Se os elementos estão na página', async () => {
     renderWithRouter(<Drinks />);
-    const meals = screen.getByText(/Drinks/i);
-    const btnUser = screen.getByTestId('profile-top-btn');
-    const btnSearch = screen.getByTestId(searchTopBtn);
+    const meals = await screen.findByRole('heading', { level: 1, name: 'Drinks' });
+    const btnUser = await screen.findByTestId('profile-top-btn');
+    const btnSearch = await screen.findByTestId(searchTopBtn);
 
     expect(meals).toBeInTheDocument();
     expect(btnUser).toBeInTheDocument();

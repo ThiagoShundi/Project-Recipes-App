@@ -7,13 +7,14 @@
   font-family: sans-serif;
   height: 100vh;
   justify-content: center;
-  width: 100%;
+  margin: 0 auto;
+  width: 100vw;
 }
 
-.rocksGlass {
+/* .rocksGlass {
   animation: shake 1s infinite ease;
   max-height: 80vh;
-}
+} */
 
 .footer {
   bottom: 0;
@@ -34,7 +35,7 @@
 }
 */
 
-.meals > .logo {
+/* .meals > .logo {
   animation: shake 1.5s infinite ease;
   color: aliceblue;
   font-family: Montserrat , sans-serif;
@@ -70,4 +71,4 @@
   100% {
     transform: rotate(-10deg);
   }
-}
+} */

@@ -1,0 +1,23 @@
+.meals-page {
+  background-color: white;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.meals-page h1 {
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 3rem 0;
+}
+
+.meal-card img {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin-top: 50px;
+  object-fit: cover;
+  padding: 20px;
+  width: 100%;
+}

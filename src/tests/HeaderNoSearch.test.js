@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import Profile from '../pages/Profile';
-import { renderWithRouter } from '../services/renderWith';
+import { renderWithRouter } from './helpers/renderWith';
 
 describe('Teste do componente HeaderNoSearch', () => {
   it('Verificar os elementos do HeaderNoSearch', () => {

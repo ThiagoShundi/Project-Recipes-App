@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Drinks from '../pages/Drinks';
-import { renderWithRouter } from '../services/renderWith';
+import { renderWithRouter } from './helpers/renderWith';
 
 describe('Teste do componente Header', () => {
   it('Verificar os elementos do Header', () => {
