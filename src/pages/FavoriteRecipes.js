@@ -1,34 +1,53 @@
 import React from 'react';
 import HeaderNoSearch from '../components/HeaderNoSearch';
+import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import '../styles/FavoriteRecipe.css';
 
 function FavoriteRecipes() {
-  const getFvorites = localStorage
+  const getFavorites = localStorage
     .getItem('favoriteRecipes') ? JSON
       .parse(localStorage.getItem('favoriteRecipes')) : [];
-  console.log(getFvorites);
+  // console.log(getFavorites);
+
   return (
     <div>
       <HeaderNoSearch title="Favorite Recipes" />
       <button type="button" data-testid="filter-by-all-btn"> All</button>
       <button type="button" data-testid="filter-by-meal-btn"> Meals</button>
       <button type="button" data-testid="filter-by-drink-btn"> Drinks</button>
-      { getFvorites && getFvorites.map((favorite, index) => (
-        <>
-          <img
-            src={ favorite.image }
-            alt="recipe"
-            data-testid={ `${index}-horizontal-image` }
-          />
-          <p data-testid={ `${index}-horizontal-top-text` }>{ favorite.category }</p>
-          <p data-testid={ `${index}-horizontal-name` }>{ favorite.name }</p>
-          <button type="button" data-testid={ `${index}-horizontal-share-btn` }>
-            Share
-          </button>
-          <button type="button" data-testid={ `${index}-horizontal-favorite-btn` }>
-            Favorite
-          </button>
-        </>
-      ))}
+      <ul>
+        { getFavorites && (getFavorites.map((favoriteMeal, indexMeal) => (
+          <li key={ indexMeal }>
+            <img
+              src={ favoriteMeal.image }
+              alt="recipe"
+              data-testid={ `${indexMeal}-horizontal-image` }
+            />
+            <p data-testid={ `${indexMeal}-horizontal-top-text` }>
+              {favoriteMeal.type === 'meal' ? (
+                `${favoriteMeal.nationality} - ${favoriteMeal.category}`
+              ) : `${favoriteMeal.category}`}
+            </p>
+            <p data-testid={ `${indexMeal}-horizontal-name` }>{ favoriteMeal.name }</p>
+            <button
+              type="button"
+              data-testid={ `${indexMeal}-horizontal-share-btn` }
+              src={ shareIcon }
+            >
+              <img src={ shareIcon } alt="icon share" />
+            </button>
+            <button
+              type="button"
+              data-testid={ `${indexMeal}-horizontal-favorite-btn` }
+              src={ blackHeartIcon }
+            >
+              <img src={ blackHeartIcon } alt="icon black heart" />
+            </button>
+          </li>
+        )))}
+      </ul>
+
     </div>
   );
 }
