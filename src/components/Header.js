@@ -42,10 +42,12 @@ function Header({ title }) {
       </div>
       {
         loadSearch && (
-          <ButtonSearch />
+          <>
+            <ButtonSearch />
+            <SearchBar />
+          </>
         )
       }
-      <SearchBar />
     </header>
   );
 }
