@@ -7,6 +7,8 @@ import {
   fetchMeals,
   fetchDrinksCategory,
   fetchMealsCategory,
+  fetchDrinkId,
+  fetchMealsId,
 } from '../services/fetchRecipes';
 
 const INITIAL_STATE = {
@@ -17,6 +19,8 @@ const INITIAL_STATE = {
   drinksCategoryState: [],
   isLoadingState: true,
   errorState: '',
+  drinkId: [],
+  mealsId: [],
 };
 
 const useDataInfos = () => {
@@ -32,6 +36,8 @@ const useDataInfos = () => {
     dataMealsCategoryState,
     setDataMealsCategoryState,
   ] = useState(INITIAL_STATE.mealsCategoryState);
+  const [drinkIdState, setDrinkIdState] = useState(INITIAL_STATE.drinkId);
+  const [mealsIdState, setMealsIdState] = useState(INITIAL_STATE.mealsId);
 
   const categoryFilterMeals = (category) => {
     const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
@@ -61,6 +67,22 @@ const useDataInfos = () => {
     const url = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
     fetchMeals(url)
       .then((response) => setDataMealsState(response.meals))
+      .catch((err) => setErrorState(err.message))
+      .finally(() => setIsLoadingState(false));
+  };
+
+  const getDrinkId = (id) => {
+    const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+    fetchDrinkId(url)
+      .then((response) => setDrinkIdState(response.drinks))
+      .catch((err) => setErrorState(err.message))
+      .finally(() => setIsLoadingState(false));
+  };
+
+  const getMealsId = (id) => {
+    const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+    fetchMealsId(url)
+      .then((response) => setMealsIdState(response.meals))
       .catch((err) => setErrorState(err.message))
       .finally(() => setIsLoadingState(false));
   };
@@ -105,10 +127,16 @@ const useDataInfos = () => {
     dataDrinksCategoryState,
     isLoadingState,
     errorState,
+    drinkIdState,
+    mealsIdState,
     categoryFilterMeals,
     categoryFilterDrinks,
     setFilterDrinks,
     setFilterMeals,
+    getDrinkId,
+    getMealsId,
+    setDrinkIdState,
+    setMealsIdState,
   };
 };
 

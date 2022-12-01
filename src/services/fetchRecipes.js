@@ -28,4 +28,17 @@ const fetchDrinksCategory = async (urlDrinksCategory) => {
   return data;
 };
 
-export { fetchData, fetchMeals, fetchDrinks, fetchMealsCategory, fetchDrinksCategory };
+const fetchDrinkId = async (urlDrinkId) => {
+  const response = await fetch(urlDrinkId);
+  const data = await response.json();
+  return data;
+};
+
+const fetchMealsId = async (urlMealsId) => {
+  const response = await fetch(urlMealsId);
+  const data = await response.json();
+  return data;
+};
+
+export { fetchData, fetchMeals, fetchDrinks, fetchMealsCategory,
+  fetchDrinksCategory, fetchDrinkId, fetchMealsId };
