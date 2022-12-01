@@ -1,4 +1,4 @@
-// import { useContext } from 'react';
+import { useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
@@ -18,6 +18,12 @@ export default function Meals() {
     categoryFilterMeals,
     setFilterMeals,
   } = useDataInfos();
+
+  useEffect(() => {
+    if (error) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  }, [error]);
 
   const twelve = 12;
   const theFirstTwelve = dataMeals.slice(0, twelve);

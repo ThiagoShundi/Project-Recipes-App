@@ -1,0 +1,43 @@
+.imgRecipes {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin-top: 0;
+  width: 100%;
+}
+
+button {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  object-fit: cover;
+  width: 15%;
+}
+
+.buttons {
+  display: flex;
+}
+
+.imgBtn {
+  height: 100%;
+  width: 100%;
+}
+
+.filters {
+  display: flex;
+  height: 80px;
+  position: fixed;
+  top: 10px;
+  width: 100%;
+}
+
+ul {
+  margin-top: 300px;
+}
+
+.btnRecipes {
+  height: 200px;
+  width: 200px;
+}

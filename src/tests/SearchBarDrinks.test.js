@@ -16,6 +16,10 @@ const mockOneDrink = { drinks: [{
 };
 
 describe('Testes do Drinks', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Se os elementos estão na página', async () => {
     renderWithRouter(<Drinks />);
     const meals = await screen.findByRole('heading', { level: 1, name: 'Drinks' });
@@ -110,5 +114,28 @@ describe('Testes do Drinks', () => {
     const btnSearchFetch = screen.getByTestId(exercSearchBtn);
     userEvent.click(btnSearchFetch);
     expect(global.alert).toHaveBeenCalled();
+    console.log(fetch);
   });
+  // test('Se um alert aparece quando não é encontrado nenhuma resposta', async () => {
+  //       renderWithRouter(<Drinks />);
+
+  //   const btnSearch = screen.getByTestId(searchTopBtn);
+  //   userEvent.click(btnSearch);
+  //   const searchInput = screen.getByTestId(searchInputConst);
+  //   const ingredient = screen.getByText(/Ingredient/i);
+  //   expect(ingredient).toBeInTheDocument();
+
+  //   jest.spyOn(global, 'alert');
+  //   // global.fetch = jest.fn()
+  //   //   .mockRejectedValue({});
+  //     userEvent.type(searchInput, 'xablau');
+
+  //   const radioIngredient = screen.getByTestId('ingredient-search-radio');
+  //   radioIngredient.checked = true;
+  //   const btnSearchFetch = screen.getByTestId(exercSearchBtn);
+  //   userEvent.click(btnSearchFetch);
+
+  //   // console.log(window.alert);
+  //   expect(global.alert).toHaveBeenCalled();
+  // });
 });
