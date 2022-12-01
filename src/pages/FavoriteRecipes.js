@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import HeaderNoSearch from '../components/HeaderNoSearch';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/FavoriteRecipe.css';
 
 function FavoriteRecipes() {
+  const [redirectIdDrink, setRedirectIdDrink] = useState(false);
+  // const [idDrink, setIdDrink] = useState('');
+  const [redirectIdMeal, setRedirectIdMeal] = useState(false);
+  const [idRecipe, setIdRecipe] = useState('');
+
   const getFavoritesLocalStorage = localStorage
     .getItem('favoriteRecipes') ? JSON
       .parse(localStorage.getItem('favoriteRecipes')) : [];
 
   const [getFavorites, setGetFavorites] = useState(getFavoritesLocalStorage);
   const [filters, setFilters] = useState('');
+
+  if (redirectIdMeal) return <Redirect to={ `/meals/${idRecipe}` } />;
+  if (redirectIdDrink) return <Redirect to={ `/drinks/${idRecipe}` } />;
 
   const arrayFavorites = getFavorites
     .filter((favoriteFiltered) => favoriteFiltered.type !== filters);
@@ -22,16 +31,17 @@ function FavoriteRecipes() {
     localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
   };
 
-  const allFilter = () => {
-    setFilters('');
-  };
+  const allFilter = () => setFilters('');
 
-  const mealsFilter = () => {
-    setFilters('drink');
-  };
+  const mealsFilter = () => setFilters('drink');
 
-  const drinksFilter = () => {
-    setFilters('meal');
+  const drinksFilter = () => setFilters('meal');
+
+  const imgTeste = ({ target }) => {
+    const { id, type } = arrayFavorites[target.name];
+    setIdRecipe(id);
+    if (type === 'meal') setRedirectIdMeal(true);
+    if (type === 'drink') setRedirectIdDrink(true);
   };
 
   return (
@@ -51,18 +61,28 @@ function FavoriteRecipes() {
       <ul>
         { arrayFavorites && (arrayFavorites.map((favoriteMeal, indexMeal) => (
           <li key={ indexMeal }>
-            <img
-              className="imgRecipes"
-              src={ favoriteMeal.image }
-              alt="recipe"
-              data-testid={ `${indexMeal}-horizontal-image` }
-            />
+            <button type="button" onClick={ imgTeste } className="btnRecipes">
+              <img
+                className="imgRecipes"
+                src={ favoriteMeal.image }
+                alt="recipe"
+                data-testid={ `${indexMeal}-horizontal-image` }
+                name={ indexMeal }
+              />
+            </button>
             <p data-testid={ `${indexMeal}-horizontal-top-text` }>
               {favoriteMeal.type === 'meal' ? (
                 `${favoriteMeal.nationality} - ${favoriteMeal.category}`
               ) : `${favoriteMeal.alcoholicOrNot}` }
             </p>
-            <p data-testid={ `${indexMeal}-horizontal-name` }>{ favoriteMeal.name }</p>
+            <button
+              name={ indexMeal }
+              type="button"
+              onClick={ imgTeste }
+              data-testid={ `${indexMeal}-horizontal-name` }
+            >
+              { favoriteMeal.name }
+            </button>
             <div className="buttons">
               <button
                 type="button"

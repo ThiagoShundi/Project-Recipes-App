@@ -62,4 +62,45 @@ describe('Testes do Footer', () => {
     const btnUnfavorite = screen.getAllByTestId(/-horizontal-favorite-btn/i);
     userEvent.click(btnUnfavorite[0]);
   });
+  test('Se é redirecionado para a página de detalhe ao apertar na imagem', () => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(mockLocalStorage));
+    const { history } = renderWithRouter(<FavoriteRecipes />);
+    const imgMeal = screen.getByTestId(/0-horizontal-image/i);
+
+    expect(imgMeal).toBeInTheDocument();
+    userEvent.click(imgMeal);
+    expect(history.location.pathname).toBe('/meals/52771');
+  });
+  test('Se é redirecionado para a página de detalhe ao apertar no nome', () => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(mockLocalStorage));
+    const { history } = renderWithRouter(<FavoriteRecipes />);
+    const imgMeal = screen.getByTestId(/1-horizontal-image/i);
+
+    expect(imgMeal).toBeInTheDocument();
+    userEvent.click(imgMeal);
+    expect(history.location.pathname).toBe('/drinks/178319');
+  });
+  test('Se os filtros funcionam', () => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(mockLocalStorage));
+    renderWithRouter(<FavoriteRecipes />);
+    const nameMeal = screen.getByTestId('0-horizontal-name');
+    const nameDrink = screen.getByTestId('1-horizontal-name');
+
+    expect(nameMeal).toBeInTheDocument();
+    expect(nameDrink).toBeInTheDocument();
+
+    const btnAll = screen.getByTestId('filter-by-all-btn');
+    const btnMeal = screen.getByTestId('filter-by-meal-btn');
+    const btnDrink = screen.getByTestId('filter-by-drink-btn');
+
+    userEvent.click(btnMeal);
+    expect(nameMeal.innerHTML).toBe('Spicy Arrabiata Penne');
+
+    userEvent.click(btnDrink);
+    expect(nameMeal.innerHTML).toBe('Aquamarine');
+
+    userEvent.click(btnAll);
+    expect(screen.getByTestId('0-horizontal-name')).toBeInTheDocument();
+    expect(screen.getByTestId('1-horizontal-name')).toBeInTheDocument();
+  });
 });

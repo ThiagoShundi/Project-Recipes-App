@@ -4,7 +4,6 @@
   height: 100%;
   justify-content: center;
   margin-top: 0;
-  padding: 20px;
   width: 100%;
 }
 
@@ -28,11 +27,17 @@ button {
 
 .filters {
   display: flex;
-  height: 500px;
-  position: absolute;
+  height: 80px;
+  position: fixed;
+  top: 10px;
   width: 100%;
 }
 
 ul {
-  margin-top: 200px;
+  margin-top: 300px;
+}
+
+.btnRecipes {
+  height: 200px;
+  width: 200px;
 }
