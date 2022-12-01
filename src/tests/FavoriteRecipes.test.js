@@ -61,11 +61,5 @@ describe('Testes do Footer', () => {
 
     const btnUnfavorite = screen.getAllByTestId(/-horizontal-favorite-btn/i);
     userEvent.click(btnUnfavorite[0]);
-    // jest.spyOn(global, 'localStorage');
-    // expect(window.localStorage.getItem('favoriteRecipes')).toHaveBeenCalled();
-    // const getFavoritesLocalStorage = localStorage
-    // .getItem('favoriteRecipes') ? JSON
-    //   .parse(localStorage.getItem('favoriteRecipes')) : [];
-    //   console.log(window.localStorage.getItem('favoriteRecipes'));
   });
 });

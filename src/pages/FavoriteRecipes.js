@@ -10,22 +10,46 @@ function FavoriteRecipes() {
       .parse(localStorage.getItem('favoriteRecipes')) : [];
 
   const [getFavorites, setGetFavorites] = useState(getFavoritesLocalStorage);
+  const [filters, setFilters] = useState('');
+
+  const arrayFavorites = getFavorites
+    .filter((favoriteFiltered) => favoriteFiltered.type !== filters);
+
   const unfavorite = ({ target }) => {
     const newFavorites = getFavorites
       .filter((_recipe, index) => index !== parseInt(target.name, 10));
     setGetFavorites(newFavorites);
     localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
-    console.log(getFavorites);
+  };
+
+  const allFilter = () => {
+    setFilters('');
+  };
+
+  const mealsFilter = () => {
+    setFilters('drink');
+  };
+
+  const drinksFilter = () => {
+    setFilters('meal');
   };
 
   return (
     <div>
       <HeaderNoSearch title="Favorite Recipes" />
-      <button type="button" data-testid="filter-by-all-btn"> All</button>
-      <button type="button" data-testid="filter-by-meal-btn"> Meals</button>
-      <button type="button" data-testid="filter-by-drink-btn"> Drinks</button>
+      <div className="filters">
+        <button type="button" data-testid="filter-by-all-btn" onClick={ allFilter }>
+          All
+        </button>
+        <button type="button" data-testid="filter-by-meal-btn" onClick={ mealsFilter }>
+          Meals
+        </button>
+        <button type="button" data-testid="filter-by-drink-btn" onClick={ drinksFilter }>
+          Drinks
+        </button>
+      </div>
       <ul>
-        { getFavorites && (getFavorites.map((favoriteMeal, indexMeal) => (
+        { arrayFavorites && (arrayFavorites.map((favoriteMeal, indexMeal) => (
           <li key={ indexMeal }>
             <img
               className="imgRecipes"
