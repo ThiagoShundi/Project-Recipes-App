@@ -5,7 +5,8 @@ import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import Profile from './pages/Profile';
 import Recipes from './pages/Recipes';
-import MealsId from './pages/MealsId';
+import RecipeDetails from './pages/RecipeDetails';
+// import RecipeDetails from './pages/RecipeDetails';
 
 export default function Routes() {
   return (
@@ -16,8 +17,10 @@ export default function Routes() {
       <Route path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route path="/meals" component={ Recipes } />
       <Route path="/profile" component={ Profile } />
-      <Route path="/meals/id" component={ MealsId } />
-      <Route path="/drinks/id" />
+      <Route path="/meals/:id" />
+      <Route path="/drinks/:id" />
+      <Route path="/meals/:id-da-receita" component={ RecipeDetails } />
+      <Route path="/drinks/:id-da-receita" component={ RecipeDetails } />
       <Route path="/meals/:id/in-progress" />
       <Route path="/drinks/:id/in-progress" />
     </Switch>

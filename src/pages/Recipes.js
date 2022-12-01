@@ -7,9 +7,11 @@ function Recipes() {
   if (location.pathname === '/meals') {
     return <Meals />;
   }
-  return (
-    <Drinks />
-  );
+  if (location.pathname === '/drinks') {
+    return (
+      <Drinks />
+    );
+  }
 }
 
 export default Recipes;

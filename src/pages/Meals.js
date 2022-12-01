@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
@@ -14,12 +14,12 @@ export default function Meals() {
     error,
     categoryFilterMeals,
     setFilterMeals,
-    getMealsId,
+    // getMealsId,
   } = useDataInfos();
 
   const [toggle, setToggle] = useState(false);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   useEffect(() => {
     if (error) {
@@ -43,10 +43,10 @@ export default function Meals() {
     setToggle(!toggle);
   };
 
-  const redirectToDetails = (id) => {
-    history.push(`/meals/${id}`);
-    getMealsId(id);
-  };
+  // const redirectToDetails = (id) => {
+  //   history.push(`/meals/${id}`);
+  //   // getMealsId(id);
+  // };
 
   return (
     <div className="meals-page">
@@ -80,24 +80,25 @@ export default function Meals() {
             {isLoading && <Loading />}
             {error && <p>{error}</p>}
             {theFirstTwelve.map((meal, index) => (
-              <button
-                key={ index }
-                type="button"
-                onClick={ () => redirectToDetails(meal.idMeal) }
-              >
-                <div
-                  className="meal-card"
-                  data-testid={ `${index}-recipe-card` }
+              <Link to={ `/meals/${meal.idMeal}` } key={ index }>
+                <button
+                  type="button"
+                  // onClick={ () => redirectToDetails(meal.idMeal) }
                 >
-                  <img
-                    src={ meal.strMealThumb }
-                    alt={ meal.strMeal }
-                    data-testid={ `${index}-card-img` }
-                  />
+                  <div
+                    className="meal-card"
+                    data-testid={ `${index}-recipe-card` }
+                  >
+                    <img
+                      src={ meal.strMealThumb }
+                      alt={ meal.strMeal }
+                      data-testid={ `${index}-card-img` }
+                    />
 
-                  <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
-                </div>
-              </button>
+                    <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
+                  </div>
+                </button>
+              </Link>
             ))}
           </div>
         </div>
