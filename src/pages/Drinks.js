@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
@@ -16,6 +17,7 @@ export default function Meals() {
   } = useDataInfos();
 
   const [toggle, setToggle] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (error) {
@@ -37,6 +39,10 @@ export default function Meals() {
   const returnToDefaultDrinks = () => {
     setFilterDrinks();
     setToggle(!toggle);
+  };
+
+  const redirectToDetails = (id) => {
+    history.push(`/drinks/${id}`);
   };
 
   return (
@@ -71,18 +77,23 @@ export default function Meals() {
             {isLoading && <Loading />}
             {error && <p>{error}</p>}
             {theFirstTwelve.map((drink, index) => (
-              <div
-                className="drinks-card"
+              <button
+                type="button"
+                onClick={ () => redirectToDetails(drink.idDrink) }
                 key={ index }
-                data-testid={ `${index}-recipe-card` }
               >
-                <img
-                  src={ drink.strDrinkThumb }
-                  alt={ drink.strDrink }
-                  data-testid={ `${index}-card-img` }
-                />
-                <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
-              </div>
+                <div
+                  className="drinks-card"
+                  data-testid={ `${index}-recipe-card` }
+                >
+                  <img
+                    src={ drink.strDrinkThumb }
+                    alt={ drink.strDrink }
+                    data-testid={ `${index}-card-img` }
+                  />
+                  <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
+                </div>
+              </button>
             ))}
           </div>
         </div>
