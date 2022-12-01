@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
@@ -17,7 +18,7 @@ export default function Meals() {
 
   const [toggle, setToggle] = useState(false);
 
-  console.log(dataMealsCategory);
+  const history = useHistory();
 
   useEffect(() => {
     if (error) {
@@ -39,6 +40,10 @@ export default function Meals() {
   const returnToDefaultMeals = () => {
     setFilterMeals();
     setToggle(!toggle);
+  };
+
+  const redirectToDetails = (id) => {
+    history.push(`/meals/${id}`);
   };
 
   return (
@@ -73,18 +78,24 @@ export default function Meals() {
             {isLoading && <Loading />}
             {error && <p>{error}</p>}
             {theFirstTwelve.map((meal, index) => (
-              <div
-                className="meal-card"
+              <button
                 key={ index }
-                data-testid={ `${index}-recipe-card` }
+                type="button"
+                onClick={ () => redirectToDetails(meal.idMeal) }
               >
-                <img
-                  src={ meal.strMealThumb }
-                  alt={ meal.strMeal }
-                  data-testid={ `${index}-card-img` }
-                />
-                <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
-              </div>
+                <div
+                  className="meal-card"
+                  data-testid={ `${index}-recipe-card` }
+                >
+                  <img
+                    src={ meal.strMealThumb }
+                    alt={ meal.strMeal }
+                    data-testid={ `${index}-card-img` }
+                  />
+
+                  <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
+                </div>
+              </button>
             ))}
           </div>
         </div>

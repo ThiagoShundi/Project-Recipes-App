@@ -15,8 +15,8 @@ export default function Routes() {
       <Route path="/favorite-recipes" component={ FavoriteRecipes } />
       <Route path="/meals" component={ Recipes } />
       <Route path="/profile" component={ Profile } />
-      <Route path="/meals/:id" />
-      <Route path="/drinks/:id" />
+      <Route path="/meals/id" />
+      <Route path="/drinks/id" />
       <Route path="/meals/:id/in-progress" />
       <Route path="/drinks/:id/in-progress" />
     </Switch>
