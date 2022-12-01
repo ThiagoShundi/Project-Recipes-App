@@ -27,10 +27,9 @@ export default function Meals() {
 
   return (
     <div className="meals-page">
-      <Header title="Comidas" />
+      <Header title="Meals" />
       <div className="meals-container">
         <div className="meals-categories">
-          <h1>Meals</h1>
           <div className="meals-categories-list">
             {theFirstFive.map((meal, index) => (
               <button
@@ -52,7 +51,6 @@ export default function Meals() {
           </div>
         </div>
         <div className="meals-list">
-          <h2>Receitas</h2>
           <div className="meals-list-container">
             {isLoading && <Loading />}
             {error && <p>{error}</p>}
