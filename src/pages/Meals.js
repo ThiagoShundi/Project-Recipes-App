@@ -14,6 +14,7 @@ export default function Meals() {
     error,
     categoryFilterMeals,
     setFilterMeals,
+    getMealsId,
   } = useDataInfos();
 
   const [toggle, setToggle] = useState(false);
@@ -44,6 +45,7 @@ export default function Meals() {
 
   const redirectToDetails = (id) => {
     history.push(`/meals/${id}`);
+    getMealsId(id);
   };
 
   return (
