@@ -1,15 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 import useDataInfos from '../hooks/useDataInfos';
-// import AppContext from '../context/AppContext';
 import '../styles/Meals.css';
 
 export default function Meals() {
-  // const { dataMealsState } = useContext(AppContext);
-  // console.log(dataMealsState);
-
   const {
     dataMeals,
     dataMealsCategory,
@@ -18,6 +14,10 @@ export default function Meals() {
     categoryFilterMeals,
     setFilterMeals,
   } = useDataInfos();
+
+  const [toggle, setToggle] = useState(false);
+
+  console.log(dataMealsCategory);
 
   useEffect(() => {
     if (error) {
@@ -31,6 +31,16 @@ export default function Meals() {
   const five = 5;
   const theFirstFive = dataMealsCategory.slice(0, five);
 
+  const setCategoryFilterMeals = (meal) => {
+    categoryFilterMeals(meal);
+    setToggle(!toggle);
+  };
+
+  const returnToDefaultMeals = () => {
+    setFilterMeals();
+    setToggle(!toggle);
+  };
+
   return (
     <div className="meals-page">
       <Header title="Meals" />
@@ -42,7 +52,9 @@ export default function Meals() {
                 type="button"
                 key={ index }
                 data-testid={ `${meal.strCategory}-category-filter` }
-                onClick={ () => categoryFilterMeals(meal.strCategory) }
+                onClick={ () => (!toggle
+                  ? setCategoryFilterMeals(meal.strCategory)
+                  : returnToDefaultMeals()) }
               >
                 {meal.strCategory}
               </button>

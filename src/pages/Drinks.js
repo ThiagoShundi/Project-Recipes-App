@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
@@ -15,6 +15,8 @@ export default function Meals() {
     setFilterDrinks,
   } = useDataInfos();
 
+  const [toggle, setToggle] = useState(false);
+
   useEffect(() => {
     if (error) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
@@ -27,6 +29,16 @@ export default function Meals() {
   const five = 5;
   const theFirstFive = dataDrinksCategory.slice(0, five);
 
+  const setCategoryFilterDrinks = (drink) => {
+    categoryFilterDrinks(drink);
+    setToggle(!toggle);
+  };
+
+  const returnToDefaultDrinks = () => {
+    setFilterDrinks();
+    setToggle(!toggle);
+  };
+
   return (
     <div className="drinks-page">
       <Header title="Drinks" />
@@ -38,7 +50,9 @@ export default function Meals() {
                 type="button"
                 key={ index }
                 data-testid={ `${drink.strCategory}-category-filter` }
-                onClick={ () => categoryFilterDrinks(drink.strCategory) }
+                onClick={ () => (!toggle
+                  ? setCategoryFilterDrinks(drink.strCategory)
+                  : returnToDefaultDrinks()) }
               >
                 {drink.strCategory}
               </button>
