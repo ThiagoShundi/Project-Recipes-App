@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react';
-import { fetchMeals } from '../services/fetchRecipes';
-import Header from '../components/Header';
+import { useEffect } from 'react';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 import Loading from '../components/Loading';
+import useDataInfos from '../hooks/useDataInfos';
+// import AppContext from '../context/AppContext';
 import '../styles/Meals.css';
-import ButtonDrinks from '../components/ButtonDrinks';
-import ButtonMeals from '../components/ButtonMeals';
 
 export default function Meals() {
-  const [meals, setMeals] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const { dataMealsState } = useContext(AppContext);
+  // console.log(dataMealsState);
 
-  useEffect(() => {
-    const urlMeals = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-    fetchMeals(urlMeals)
-      .then((response) => setMeals(response.meals))
-      .catch(() => setError('Um erro aconteceu tente novamente'))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const {
+    dataMeals,
+    dataMealsCategory,
+    isLoading,
+    error,
+    categoryFilterMeals,
+    setFilterMeals,
+  } = useDataInfos();
 
   useEffect(() => {
     if (error) {
@@ -27,29 +26,57 @@ export default function Meals() {
   }, [error]);
 
   const twelve = 12;
-  const theFirstTwelve = meals.slice(0, twelve);
+  const theFirstTwelve = dataMeals.slice(0, twelve);
+
+  const five = 5;
+  const theFirstFive = dataMealsCategory.slice(0, five);
+
   return (
     <div className="meals-page">
       <Header title="Meals" />
-      <ButtonDrinks />
-      <ButtonMeals />
-      {isLoading && <Loading />}
-      {
-        theFirstTwelve.map((meal, index) => (
-          <div
-            key={ index }
-            data-testid={ `${index}-recipe-card` }
-            className="meal-card"
-          >
-            <img
-              src={ meal.strMealThumb }
-              alt={ meal.strMeal }
-              data-testid={ `${index}-card-img` }
-            />
-            <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
+      <div className="meals-container">
+        <div className="meals-categories">
+          <div className="meals-categories-list">
+            {theFirstFive.map((meal, index) => (
+              <button
+                type="button"
+                key={ index }
+                data-testid={ `${meal.strCategory}-category-filter` }
+                onClick={ () => categoryFilterMeals(meal.strCategory) }
+              >
+                {meal.strCategory}
+              </button>
+            ))}
+            <button
+              data-testid="All-category-filter"
+              type="button"
+              onClick={ () => setFilterMeals() }
+            >
+              All
+            </button>
           </div>
-        ))
-      }
+        </div>
+        <div className="meals-list">
+          <div className="meals-list-container">
+            {isLoading && <Loading />}
+            {error && <p>{error}</p>}
+            {theFirstTwelve.map((meal, index) => (
+              <div
+                className="meal-card"
+                key={ index }
+                data-testid={ `${index}-recipe-card` }
+              >
+                <img
+                  src={ meal.strMealThumb }
+                  alt={ meal.strMeal }
+                  data-testid={ `${index}-card-img` }
+                />
+                <p data-testid={ `${index}-card-name` }>{meal.strMeal}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       <Footer />
     </div>
   );
