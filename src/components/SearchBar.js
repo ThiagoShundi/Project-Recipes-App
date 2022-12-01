@@ -23,15 +23,20 @@ function SearchBar({ title }) {
     if ((radios[2].checked) && (input.length === 1)) {
       http = `https://www.themealdb.com/api/json/v1/1/search.php?f=${input}`;
     }
-    if (http.length > 0) {
-      const response = await fetch(http);
-      const repos = await response.json();
-      if ((repos) && (repos.meals.length === 1)) {
-        setIdMeal(repos.meals[0].idMeal);
-        setRedirectIdMeal(true);
+    try {
+      if (http.length > 0) {
+        const response = await fetch(http);
+        const repos = await response.json();
+        console.log(repos);
+        if (repos.meals.length === 1) {
+          setIdMeal(repos.meals[0].idMeal);
+          setRedirectIdMeal(true);
+        }
+      } else {
+        global.alert('Your search must have only 1 (one) character');
       }
-    } else {
-      global.alert('Your search must have only 1 (one) character');
+    } catch (error) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   };
 
@@ -48,15 +53,20 @@ function SearchBar({ title }) {
     if ((radios[2].checked) && (input.length === 1)) {
       http = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${input}`;
     }
-    if (http.length > 0) {
-      const response = await fetch(http);
-      const repos = await response.json();
-      if (repos.drinks.length === 1) {
-        setIdDrink(repos.drinks[0].idDrink);
-        setRedirectIdDrink(true);
+    try {
+      if (http.length > 0) {
+        const response = await fetch(http);
+        const repos = await response.json();
+        if (repos.drinks.length === 1) {
+          setIdDrink(repos.drinks[0].idDrink);
+          setRedirectIdDrink(true);
+        }
+        console.log(repos);
+      } else {
+        global.alert('Your search must have only 1 (one) character');
       }
-    } else {
-      global.alert('Your search must have only 1 (one) character');
+    } catch (error) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   };
 
