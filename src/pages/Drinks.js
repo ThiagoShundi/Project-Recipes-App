@@ -10,43 +10,43 @@ import ButtonMeals from '../components/ButtonMeals';
 export default function Drinks() {
   const [drinks, setDrinks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
     fetchDrinks(urlDrinks)
-      .then((response) => setDrinks(response.drinks))
-      .catch((err) => setError(err.message))
+      .then((response) => (setDrinks(response.drinks)))
+      .catch(() => setError('Um erro aconteceu tente novamente'))
       .finally(() => setIsLoading(false));
   }, []);
-
+  useEffect(() => {
+    if (error) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  }, [error]);
   const twelve = 12;
   const theFirstTwelve = drinks.slice(0, twelve);
-
   return (
     <div className="drinks-page">
       <Header title="Drinks" />
       <ButtonDrinks />
       <ButtonMeals />
       {isLoading && <Loading />}
-      {error && <p>{error}</p>}
       {
-        error
-          ? global.alert('Sorry, we haven\'t found any recipes for these filters.')
-          : theFirstTwelve.map((drink, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recipe-card` }
-              className="drinks-card"
-            >
-              <img
-                src={ drink.strDrinkThumb }
-                alt={ drink.strDrink }
-                data-testid={ `${index}-card-img` }
-              />
-              <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
-            </div>
-          ))
+        theFirstTwelve.map((drink, index) => (
+          <div
+            key={ index }
+            data-testid={ `${index}-recipe-card` }
+            className="drinks-card"
+          >
+            <img
+              src={ drink.strDrinkThumb }
+              alt={ drink.strDrink }
+              data-testid={ `${index}-card-img` }
+            />
+            <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
+          </div>
+        ))
       }
       <Footer />
     </div>

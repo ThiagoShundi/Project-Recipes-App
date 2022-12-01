@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 import { renderWithRouter } from './helpers/renderWith';
@@ -102,5 +102,17 @@ describe('Testes do Footer', () => {
     userEvent.click(btnAll);
     expect(screen.getByTestId('0-horizontal-name')).toBeInTheDocument();
     expect(screen.getByTestId('1-horizontal-name')).toBeInTheDocument();
+
+describe('Testes da page FavoriteRecipes', () => {
+  it('Deve ter um titulo Favorite Recipes e um botão para ir ao profile', async () => {
+    const { history } = renderWithRouter(<FavoriteRecipes />);
+    const favoriteTitle = screen.getByRole('heading', { level: 1, name: 'Favorite Recipes' });
+    expect(favoriteTitle).toBeInTheDocument();
+    const profileButton = screen.getByRole('link', { href: '/profile' });
+    expect(profileButton).toBeInTheDocument();
+    const profileImage = screen.getByRole('img', { src: '/static/media/profileIcon.44eb3608f431845fe2fc2d2a23d758ae.svg' });
+    expect(profileImage).toBeInTheDocument();
+    userEvent.click(profileButton);
+    await waitFor(() => expect(history.location.pathname).toBe('/profile'));
   });
 });

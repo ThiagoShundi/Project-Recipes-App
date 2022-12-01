@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import App from '../App';
 import Login from '../pages/Login';
 import { renderWithRouter } from './helpers/renderWith';
 
@@ -8,7 +9,7 @@ describe('Testes da page Login', () => {
   const passwordDataTestId = 'password-input';
   const submitDataTestId = 'login-submit-btn';
   it('Deve existir um input para email e senha e um botão submit', async () => {
-    renderWithRouter(<Login />);
+    renderWithRouter(<App />);
     const emailInput = screen.getByTestId(emailDataTestId);
     expect(emailInput).toBeInTheDocument();
     const passwordInput = screen.getByTestId(passwordDataTestId);
