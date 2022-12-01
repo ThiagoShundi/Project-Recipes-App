@@ -55,7 +55,6 @@ function SearchBar({ title }) {
         setIdDrink(repos.drinks[0].idDrink);
         setRedirectIdDrink(true);
       }
-      console.log(repos);
     } else {
       global.alert('Your search must have only 1 (one) character');
     }
