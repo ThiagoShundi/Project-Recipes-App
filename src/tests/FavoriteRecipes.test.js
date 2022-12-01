@@ -102,7 +102,8 @@ describe('Testes do Footer', () => {
     userEvent.click(btnAll);
     expect(screen.getByTestId('0-horizontal-name')).toBeInTheDocument();
     expect(screen.getByTestId('1-horizontal-name')).toBeInTheDocument();
-
+  });
+});
 describe('Testes da page FavoriteRecipes', () => {
   it('Deve ter um titulo Favorite Recipes e um botão para ir ao profile', async () => {
     const { history } = renderWithRouter(<FavoriteRecipes />);
