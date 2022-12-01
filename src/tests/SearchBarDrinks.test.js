@@ -26,6 +26,7 @@ describe('Testes do Drinks', () => {
     expect(btnUser).toBeInTheDocument();
     expect(btnSearch).toBeInTheDocument();
   });
+
   test('Se o fetch é chamado com o ingrediente', async () => {
     renderWithRouter(<Drinks />);
 
@@ -48,6 +49,7 @@ describe('Testes do Drinks', () => {
     expect(global.fetch).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenLastCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=water');
   });
+
   test('Se o fetch é chamado com o nome', async () => {
     renderWithRouter(<Drinks />);
     const btnSearch = screen.getByTestId(searchTopBtn);

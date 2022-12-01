@@ -1,73 +1,73 @@
-import { React, useEffect, useState } from 'react';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { fetchDrinks } from '../services/fetchRecipes';
+import Header from '../components/Header';
 import Loading from '../components/Loading';
+import useDataInfos from '../hooks/useDataInfos';
 import '../styles/Drinks.css';
 
-export default function Drinks() {
-  const [drinks, setDrinks] = useState([]);
-  const [categoryDrinks, setcategoryDrinks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  console.log(categoryDrinks);
-
-  useEffect(() => {
-    const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
-    fetchDrinks(urlDrinks)
-      .then((response) => setDrinks(response.drinks))
-      .catch((err) => setError(err.message))
-      .finally(() => setIsLoading(false));
-
-    const urlDrinksCategory = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
-    fetchDrinks(urlDrinksCategory)
-      .then((response) => setcategoryDrinks(response.drinks))
-      .catch((err) => setError(err.message))
-      .finally(() => setIsLoading(false));
-  }, []);
+export default function Meals() {
+  const {
+    dataDrinks,
+    dataDrinksCategory,
+    isLoading,
+    error,
+    categoryFilterDrinks,
+    setFilterDrinks,
+  } = useDataInfos();
 
   const twelve = 12;
-  const theFirstTwelve = drinks.slice(0, twelve);
+  const theFirstTwelve = dataDrinks.slice(0, twelve);
 
   const five = 5;
-  const theFirstFive = categoryDrinks.slice(0, five);
+  const theFirstFive = dataDrinksCategory.slice(0, five);
 
   return (
     <div className="drinks-page">
-      <Header title="Drinks" />
-      {
-        theFirstFive.map((categoryName, index) => (
-          <button
-            key={ index }
-            type="button"
-            data-testid={ `${categoryName.strCategory}-category-filter` }
-            className="category-filter"
-          >
-            { categoryName.strCategory }
-          </button>
-        ))
-      }
-      {isLoading && <Loading />}
-      {error && <p>{error}</p>}
-      {
-        error
-          ? global.alert('Sorry, we haven\'t found any recipes for these filters.')
-          : theFirstTwelve.map((drink, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recipe-card` }
-              className="drinks-card"
+      <Header title="Bebidas" />
+      <div className="drinks-container">
+        <div className="drinks-categories">
+          <h1>Drinks</h1>
+          <div className="drinks-categories-list">
+            {theFirstFive.map((drink, index) => (
+              <button
+                type="button"
+                key={ index }
+                data-testid={ `${drink.strCategory}-category-filter` }
+                onClick={ () => categoryFilterDrinks(drink.strCategory) }
+              >
+                {drink.strCategory}
+              </button>
+            ))}
+            <button
+              data-testid="All-category-filter"
+              type="button"
+              onClick={ () => setFilterDrinks() }
             >
-              <img
-                src={ drink.strDrinkThumb }
-                alt={ drink.strDrink }
-                data-testid={ `${index}-card-img` }
-              />
-              <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
-            </div>
-          ))
-      }
+              All
+            </button>
+          </div>
+        </div>
+        <div className="drinks-list">
+          <h2>Receitas</h2>
+          <div className="drinks-list-container">
+            {isLoading && <Loading />}
+            {error && <p>{error}</p>}
+            {theFirstTwelve.map((drink, index) => (
+              <div
+                className="drinks-card"
+                key={ index }
+                data-testid={ `${index}-recipe-card` }
+              >
+                <img
+                  src={ drink.strDrinkThumb }
+                  alt={ drink.strDrink }
+                  data-testid={ `${index}-card-img` }
+                />
+                <p data-testid={ `${index}-card-name` }>{drink.strDrink}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       <Footer />
     </div>
   );
