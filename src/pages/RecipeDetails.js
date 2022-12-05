@@ -6,6 +6,7 @@ export default function RecipeDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataDrinks, setDataDrinks] = useState([]);
   const [dataMeals, setDataMeals] = useState([]);
+  const [recomendation, setRecomendation] = useState([]);
   // const [error, setError] = useState('');
   const location = useLocation();
   const sete = 7;
@@ -19,21 +20,31 @@ export default function RecipeDetails() {
     if ((type === 'meals/')) {
       const id = location.pathname.slice(sete);
       const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-
+      const urlRecom = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       fetchDrinks(url)
         .then((response) => setDataMeals(response.meals))
         // .catch((err) => setError(err.message))
         .finally(() => setIsLoading(false));
+
+      fetchDrinks(urlRecom)
+        .then((response) => setRecomendation(response))
+        // .catch((err) => setError(err.message))
+        .finally(() => console.log(recomendation));
     }
 
     if ((type === 'drinks')) {
       const id = location.pathname.slice(oito);
       const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-
+      const urlRecom = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
       fetchDrinks(url)
         .then((response) => setDataDrinks(response.drinks))
         // .catch((err) => setError(err.message))
         .finally(() => setIsLoading(false));
+
+      fetchDrinks(urlRecom)
+        .then((response) => setRecomendation(response))
+        // .catch((err) => setError(err.message))
+        .finally(() => console.log(recomendation));
     }
   }, [location.pathname, type]);
   if ((type === 'drinks') && (dataDrinks.length > 0)) {
