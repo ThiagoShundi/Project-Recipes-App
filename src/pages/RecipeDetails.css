@@ -1,0 +1,17 @@
+.allRecomendation {
+  display: flex;
+  overflow: auto;
+  width: 350px;
+}
+
+.cardRecomendation {
+  align-items: center;
+  text-align: center;
+  margin: 15px;
+}
+
+.imgRecomendation {
+  height: 150px;
+  padding-bottom: 15px;
+  width: 150px;
+}

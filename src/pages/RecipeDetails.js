@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
+import './RecipeDetails.css';
 
 export default function RecipeDetails() {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,6 +16,7 @@ export default function RecipeDetails() {
   let dataRecipe = [];
   let ingredients = [];
   let a = '';
+  const SIX = 6;
 
   useEffect(() => {
     if ((type === 'meals/')) {
@@ -27,9 +29,9 @@ export default function RecipeDetails() {
         .finally(() => setIsLoading(false));
 
       fetchDrinks(urlRecom)
-        .then((response) => setRecomendation(response))
-        // .catch((err) => setError(err.message))
-        .finally(() => console.log(recomendation));
+        .then((response) => setRecomendation(response.drinks.slice(0, SIX)));
+      // .catch((err) => setError(err.message)
+      // .finally(() => setRecomendation(recomendation));
     }
 
     if ((type === 'drinks')) {
@@ -42,11 +44,12 @@ export default function RecipeDetails() {
         .finally(() => setIsLoading(false));
 
       fetchDrinks(urlRecom)
-        .then((response) => setRecomendation(response))
-        // .catch((err) => setError(err.message))
-        .finally(() => console.log(recomendation));
+        .then((response) => setRecomendation(response.meals.slice(0, SIX)));
+      // .catch((err) => setError(err.message))
+      // .finally(() => setRecomendation(recomendation.slice(0, SIX)));
     }
   }, [location.pathname, type]);
+
   if ((type === 'drinks') && (dataDrinks.length > 0)) {
     dataRecipe = dataDrinks;
   }
@@ -80,7 +83,7 @@ export default function RecipeDetails() {
       `${dataRecipe[0].strIngredient19} - ${dataRecipe[0].strMeasure19}`,
       `${dataRecipe[0].strIngredient20} - ${dataRecipe[0].strMeasure20}`,
     ];
-    console.log(ingredientsAll);
+    // console.log(ingredientsAll);
     ingredients = ingredientsAll
       .filter((ingre) => (ingre !== 'null - null') && (ingre !== 'null - ') && (
         ingre !== 'undefined - undefined') && (ingre !== ' - '));
@@ -129,6 +132,38 @@ export default function RecipeDetails() {
           { (type === 'meals/') && (
             <iframe title="video" data-testid="video" src={ a } />
           )}
+        </div>
+      )}
+      {recomendation.length === SIX && (
+        <div className="allRecomendation">
+          {recomendation.map((ele, ind) => (
+            <div
+              key={ ind }
+              data-testid={ `${ind}-recommendation-card` }
+              className="cardRecomendation"
+            >
+              {(type === 'meals/') && (
+                <>
+                  <img
+                    className="imgRecomendation"
+                    src={ ele.strDrinkThumb }
+                    alt={ ele.strDrink }
+                  />
+                  <p data-testid={ `${ind}-recommendation-title` }>{ele.strDrink}</p>
+                </>
+              )}
+              {(type === 'drinks') && (
+                <>
+                  <img
+                    className="imgRecomendation"
+                    src={ ele.strMealThumb }
+                    alt={ ele.strMeal }
+                  />
+                  <p data-testid={ `${ind}-recommendation-title` }>{ele.strMeal}</p>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>
