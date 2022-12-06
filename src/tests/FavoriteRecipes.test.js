@@ -24,6 +24,11 @@ const mockLocalStorage = [{
 }];
 
 describe('Testes do Footer', () => {
+  beforeEach(() => {
+    navigator.clipboard = {
+      writeText: jest.fn(),
+    };
+  });
   test('Se é renderizado as receitas com o localStorage com a chave favoriteRecipes', () => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(mockLocalStorage));
     renderWithRouter(<FavoriteRecipes />);
@@ -113,5 +118,13 @@ describe('Testes do Footer', () => {
     expect(profileImage[0]).toBeInTheDocument();
     userEvent.click(profileButton);
     await waitFor(() => expect(history.location.pathname).toBe('/profile'));
+  });
+  it('Copia o rota da receita', async () => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(mockLocalStorage));
+    renderWithRouter(<FavoriteRecipes />);
+    const profileImage = screen.getAllByRole('img');
+    userEvent.click(profileImage[2]);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/meals/52771');
   });
 });
