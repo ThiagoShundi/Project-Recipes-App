@@ -1,20 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
-import { FilterContextState } from '../context/InfoContext';
 import '../styles/RecipeDetails.css';
 
 export default function RecipeDetailsDrink() {
-  const { dispatch } = useContext(FilterContextState) || {};
   const [isLoading, setIsLoading] = useState(true);
   const [dataDrinks, setDataDrinks] = useState([]);
   const [recomendation, setRecomendation] = useState([]);
   const [btnInProgress, setBtnInProgress] = useState(false);
   const [btnShare, setBtnShare] = useState(false);
-
-  useEffect(() => {
-    dispatch({ type: 'ADD_PROGRESS-DRINKS', payload: dataDrinks });
-  }, []);
 
   const location = useLocation();
   let dataRecipe = [];

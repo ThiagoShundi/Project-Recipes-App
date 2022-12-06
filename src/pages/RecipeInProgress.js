@@ -8,7 +8,6 @@ export default function RecipeInProgress() {
   const location = useLocation();
   const sete = 7;
   const type = location.pathname.slice(0, sete);
-  console.log(type);
   if (type === '/meals/') {
     return <ProgressDetailsMeals />;
   }

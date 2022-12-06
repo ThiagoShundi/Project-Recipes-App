@@ -21,11 +21,6 @@ const filterReducer = (state, action) => {
       ...state,
       searchInputRecipesMeals: action.payload,
     };
-  case 'ADD_PROGRESS-DRINKS':
-    return {
-      ...state,
-      progressDataDrinks: action.payload,
-    };
   default:
     return state;
   }
