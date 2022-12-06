@@ -9,6 +9,7 @@ export default function RecipeDetails() {
   const [dataMeals, setDataMeals] = useState([]);
   const [recomendation, setRecomendation] = useState([]);
   const [btnInProgress, setBtnInProgress] = useState(false);
+  const [btnShare, setBtnShare] = useState(false);
   // const [error, setError] = useState('');
   const location = useLocation();
   const sete = 7;
@@ -65,42 +66,46 @@ export default function RecipeDetails() {
 
   if ((type === 'drinks') && (dataDrinks.length > 0)) {
     dataRecipe = dataDrinks;
+    const keysData = Object.keys(dataDrinks[0]);
+    const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
+    const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
+    const valuesIng = ingredientsFilter.filter((ingre) => dataDrinks[0][ingre] !== null);
+    const valuesMen = meansureFilter.filter((ingre) => dataDrinks[0][ingre] !== null);
+    valuesIng.forEach((add, index) => {
+      let newValue = '';
+      if (dataDrinks[0][valuesMen[index]] !== undefined) {
+        newValue = `${dataDrinks[0][add]} - ${dataDrinks[0][valuesMen[index]]}`;
+      } else { newValue = `${dataDrinks[0][add]}`; }
+      ingredients = [...ingredients, newValue];
+    });
   }
 
   if ((type === 'meals/') && (dataMeals.length > 0)) {
     dataRecipe = dataMeals;
     const ytVideo = dataRecipe[0].strYoutube;
     a = ytVideo.replace('watch?v=', 'embed/');
+    const keysData = Object.keys(dataMeals[0]);
+    const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
+    const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
+    const valuesIng = ingredientsFilter.filter((ingre) => dataMeals[0][ingre] !== null);
+    const valuesMen = meansureFilter.filter((ingre) => dataMeals[0][ingre] !== null);
+    valuesIng.forEach((add, index) => {
+      let newValue = '';
+      if (dataMeals[0][valuesMen[index]] !== undefined) {
+        newValue = `${dataMeals[0][add]} - ${dataMeals[0][valuesMen[index]]}`;
+      } else { newValue = `${dataMeals[0][add]}`; }
+      ingredients = [...ingredients, newValue];
+    });
   }
 
-  if ((dataDrinks.length > 0) || (dataMeals.length > 0)) {
-    const ingredientsAll = [
-      `${dataRecipe[0].strIngredient1} - ${dataRecipe[0].strMeasure1}`,
-      `${dataRecipe[0].strIngredient2} - ${dataRecipe[0].strMeasure2}`,
-      `${dataRecipe[0].strIngredient3} - ${dataRecipe[0].strMeasure3}`,
-      `${dataRecipe[0].strIngredient4} - ${dataRecipe[0].strMeasure4}`,
-      `${dataRecipe[0].strIngredient5} - ${dataRecipe[0].strMeasure5}`,
-      `${dataRecipe[0].strIngredient6} - ${dataRecipe[0].strMeasure6}`,
-      `${dataRecipe[0].strIngredient7} - ${dataRecipe[0].strMeasure7}`,
-      `${dataRecipe[0].strIngredient8} - ${dataRecipe[0].strMeasure8}`,
-      `${dataRecipe[0].strIngredient9} - ${dataRecipe[0].strMeasure9}`,
-      `${dataRecipe[0].strIngredient10} - ${dataRecipe[0].strMeasure10}`,
-      `${dataRecipe[0].strIngredient11} - ${dataRecipe[0].strMeasure11}`,
-      `${dataRecipe[0].strIngredient12} - ${dataRecipe[0].strMeasure12}`,
-      `${dataRecipe[0].strIngredient13} - ${dataRecipe[0].strMeasure13}`,
-      `${dataRecipe[0].strIngredient14} - ${dataRecipe[0].strMeasure14}`,
-      `${dataRecipe[0].strIngredient15} - ${dataRecipe[0].strMeasure15}`,
-      `${dataRecipe[0].strIngredient16} - ${dataRecipe[0].strMeasure16}`,
-      `${dataRecipe[0].strIngredient17} - ${dataRecipe[0].strMeasure17}`,
-      `${dataRecipe[0].strIngredient18} - ${dataRecipe[0].strMeasure18}`,
-      `${dataRecipe[0].strIngredient19} - ${dataRecipe[0].strMeasure19}`,
-      `${dataRecipe[0].strIngredient20} - ${dataRecipe[0].strMeasure20}`,
-    ];
-    // console.log(ingredientsAll);
-    ingredients = ingredientsAll
-      .filter((ingre) => (ingre !== 'null - null') && (ingre !== 'null - ') && (
-        ingre !== 'undefined - undefined') && (ingre !== ' - '));
-  }
+  const linkCopied = () => {
+    const mil = 1000;
+    setBtnShare(true);
+    navigator.clipboard.writeText(`http://localhost:3000${location.pathname}`);
+    setTimeout(() => {
+      setBtnShare(false);
+    }, mil);
+  };
 
   return (
     <div className="recipe-details">
@@ -150,7 +155,14 @@ export default function RecipeDetails() {
       { btnInProgress && (
         <button type="button" data-testid="start-recipe-btn">Continue Recipe</button>
       )}
-      <button type="button" data-testid="share-btn">Share</button>
+      <button
+        type="button"
+        data-testid="share-btn"
+        onClick={ linkCopied }
+      >
+        Share
+      </button>
+      {btnShare && <span>Link copied!</span>}
       <button type="button" data-testid="favorite-btn">Favorite</button>
       {recomendation.length === SIX && (
         <div className="allRecomendation">
