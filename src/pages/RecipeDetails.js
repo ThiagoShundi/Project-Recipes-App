@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
 import '../styles/RecipeDetails.css';
 
@@ -182,9 +182,11 @@ export default function RecipeDetails() {
           ))}
         </div>
       )}
-      <button type="button" data-testid="start-recipe-btn" className="btnStart">
-        Start Recipe
-      </button>
+      <Link to={ `${location.pathname}/in-progress` }>
+        <button type="button" data-testid="start-recipe-btn" className="btnStart">
+          Start Recipe
+        </button>
+      </Link>
     </div>
   );
 }

@@ -13,6 +13,8 @@ export default function Routes() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
+      <Route path="/meals/:id/in-progress" />
+      <Route path="/drinks/:id/in-progress" />
       <Route path="/meals/:id-da-receita" component={ RecipeDetails } />
       <Route path="/drinks/:id-da-receita" component={ RecipeDetails } />
       <Route path="/done-recipes" component={ DoneRecipes } />
@@ -22,8 +24,6 @@ export default function Routes() {
       <Route path="/profile" component={ Profile } />
       <Route path="/meals/:id" component={ RecipeDetails } />
       <Route path="/drinks/:id" component={ RecipeDetails } />
-      <Route path="/meals/:id/in-progress" />
-      <Route path="/drinks/:id/in-progress" />
       <Route exact path="/search/meals/:id" component={ RecipeSearchMeals } />
       <Route exact path="/search/drinks/:id" component={ RecipeSearchDrinks } />
     </Switch>
