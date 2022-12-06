@@ -79,9 +79,9 @@ p {
 
 .cardRecomendation {
   align-items: center;
+  height: 150px;
   margin: 10px;
   text-align: center;
-  height: 150px;
 }
 
 .btnStart {
