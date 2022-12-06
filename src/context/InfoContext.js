@@ -4,6 +4,7 @@ import { createContext, useMemo, useReducer } from 'react';
 const INITIAL_STATE = {
   searchInputRecipesDrinks: [],
   searchInputRecipesMeals: [],
+  progressDataDrinks: [],
 };
 
 const FilterContextState = createContext();
@@ -19,6 +20,11 @@ const filterReducer = (state, action) => {
     return {
       ...state,
       searchInputRecipesMeals: action.payload,
+    };
+  case 'ADD_PROGRESS-DRINKS':
+    return {
+      ...state,
+      progressDataDrinks: action.payload,
     };
   default:
     return state;
