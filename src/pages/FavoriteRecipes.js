@@ -10,6 +10,7 @@ function FavoriteRecipes() {
   // const [idDrink, setIdDrink] = useState('');
   const [redirectIdMeal, setRedirectIdMeal] = useState(false);
   const [idRecipe, setIdRecipe] = useState('');
+  const [btnShare, setBtnShare] = useState(false);
 
   const getFavoritesLocalStorage = localStorage
     .getItem('favoriteRecipes') ? JSON
@@ -44,6 +45,16 @@ function FavoriteRecipes() {
     if (type === 'drink') setRedirectIdDrink(true);
   };
 
+  const linkCopied = ({ target }) => {
+    console.log(target.name);
+    const mil = 1000;
+    setBtnShare(true);
+    navigator.clipboard.writeText(`http://localhost:3000/${target.name}`);
+    setTimeout(() => {
+      setBtnShare(false);
+    }, mil);
+  };
+
   return (
     <div>
       <HeaderNoSearch title="Favorite Recipes" />
@@ -58,6 +69,7 @@ function FavoriteRecipes() {
           Drinks
         </button>
       </div>
+      {btnShare && <span>Link copied!</span>}
       <ul>
         { arrayFavorites && (arrayFavorites.map((favoriteMeal, indexMeal) => (
           <li key={ indexMeal }>
@@ -88,8 +100,14 @@ function FavoriteRecipes() {
                 type="button"
                 data-testid={ `${indexMeal}-horizontal-share-btn` }
                 src={ shareIcon }
+                onClick={ (event) => linkCopied(event) }
               >
-                <img src={ shareIcon } alt="icon share" className="imgBtn" />
+                <img
+                  src={ shareIcon }
+                  alt="icon share"
+                  className="imgBtn"
+                  name={ `${favoriteMeal.type}s/${favoriteMeal.id}` }
+                />
               </button>
               <button
                 type="button"
