@@ -46,7 +46,6 @@ function FavoriteRecipes() {
   };
 
   const linkCopied = ({ target }) => {
-    console.log(target.name);
     const mil = 1000;
     setBtnShare(true);
     navigator.clipboard.writeText(`http://localhost:3000/${target.name}`);

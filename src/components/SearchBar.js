@@ -36,7 +36,6 @@ function SearchBar({ title }) {
       if (http.length > 0) {
         const response = await fetch(http);
         const repos = await response.json();
-        console.log(repos);
         if (repos.meals.length === 1) {
           setIdMeal(repos.meals[0].idMeal);
           setRedirectIdMeal(true);
@@ -44,7 +43,6 @@ function SearchBar({ title }) {
           setIdMeal(repos.meals[0].idMeal);
           setRedirectSearchMeal(true);
         }
-        console.log(repos.meals);
         dispatch({ type: 'ADD_FILTER-MEALS', payload: repos.meals });
       } else {
         global.alert('Your search must have only 1 (one) character');
@@ -78,7 +76,6 @@ function SearchBar({ title }) {
           setIdDrink(repos.drinks[0].idDrink);
           setRedirectSearchDrink(true);
         }
-        console.log(repos.drinks);
         dispatch({ type: 'ADD_FILTER-DRINKS', payload: repos.drinks });
       } else {
         global.alert('Your search must have only 1 (one) character');

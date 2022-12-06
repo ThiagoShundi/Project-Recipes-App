@@ -10,7 +10,6 @@ export default function RecipeDetails() {
   const [recomendation, setRecomendation] = useState([]);
   const [btnInProgress, setBtnInProgress] = useState(false);
   const [btnShare, setBtnShare] = useState(false);
-  // const [error, setError] = useState('');
   const location = useLocation();
   const sete = 7;
   const oito = 8;
@@ -19,7 +18,7 @@ export default function RecipeDetails() {
   let ingredients = [];
   let a = '';
   const SIX = 6;
-
+  const errorMessage = 'Um erro inesperado ocorreu';
   useEffect(() => {
     let recipe = {};
     const inProgressRecipes = localStorage.getItem('inProgressRecipes');
@@ -35,13 +34,13 @@ export default function RecipeDetails() {
       const urlRecom = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       fetchDrinks(url)
         .then((response) => setDataMeals(response.meals))
-        // .catch((err) => setError(err.message))
+        .catch(() => console.log(errorMessage))
         .finally(() => setIsLoading(false));
 
       fetchDrinks(urlRecom)
-        .then((response) => setRecomendation(response.drinks.slice(0, SIX)));
-      // .catch((err) => setError(err.message)
-      // .finally(() => setRecomendation(recomendation));
+        .then((response) => setRecomendation(response.drinks.slice(0, SIX)))
+        .catch(() => console.log(errorMessage))
+        .finally(() => setRecomendation(recomendation));
     }
 
     if ((type === 'drinks')) {
@@ -54,13 +53,13 @@ export default function RecipeDetails() {
       const urlRecom = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
       fetchDrinks(url)
         .then((response) => setDataDrinks(response.drinks))
-        // .catch((err) => setError(err.message))
+        .catch(() => console.log(errorMessage))
         .finally(() => setIsLoading(false));
 
       fetchDrinks(urlRecom)
-        .then((response) => setRecomendation(response.meals.slice(0, SIX)));
-      // .catch((err) => setError(err.message))
-      // .finally(() => setRecomendation(recomendation.slice(0, SIX)));
+        .then((response) => setRecomendation(response.meals.slice(0, SIX)))
+        .catch(() => console.log(errorMessage))
+        .finally(() => setRecomendation(recomendation.slice(0, SIX)));
     }
   }, [location.pathname, type]);
 
