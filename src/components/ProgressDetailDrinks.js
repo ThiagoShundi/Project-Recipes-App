@@ -69,7 +69,9 @@ export default function ProgressDetailsDrinks() {
     const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
     const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
     const valuesIng = ingredientsFilter
-      .filter((ingre) => dataDrinksInProgress[0][ingre] !== null);
+      .filter((ingre) => (
+        dataDrinksInProgress[0][ingre] !== null)
+         && (dataDrinksInProgress[0][ingre] !== ''));
     const valuesMen = meansureFilter
       .filter((ingre) => dataDrinksInProgress[0][ingre] !== null);
     valuesIng.forEach((add, index) => {
@@ -105,11 +107,11 @@ export default function ProgressDetailsDrinks() {
           <ol>
             {ingredients.map((ing, index) => (
               <div key={ index }>
-                <input type="checkbox" id={ ing } name={ ing } />
                 <label
                   data-testid={ `${index}-ingredient-step` }
                   htmlFor={ ing }
                 >
+                  <input type="checkbox" id={ ing } name={ ing } />
                   {ing}
                 </label>
               </div>

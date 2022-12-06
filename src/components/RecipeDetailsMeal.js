@@ -47,7 +47,8 @@ export default function RecipeDetailsMeal() {
     const keysData = Object.keys(dataMeals[0]);
     const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
     const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
-    const valuesIng = ingredientsFilter.filter((ingre) => dataMeals[0][ingre] !== null);
+    const valuesIng = ingredientsFilter
+      .filter((ingre) => (dataMeals[0][ingre] !== null) && (dataMeals[0][ingre] !== ''));
     const valuesMen = meansureFilter.filter((ingre) => dataMeals[0][ingre] !== null);
     valuesIng.forEach((add, index) => {
       let newValue = '';
