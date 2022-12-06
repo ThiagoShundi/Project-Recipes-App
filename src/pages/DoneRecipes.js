@@ -1,5 +1,6 @@
 import React from 'react';
 import HeaderNoSearch from '../components/HeaderNoSearch';
+import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
   const getDoneRecipes = localStorage
@@ -26,19 +27,29 @@ function DoneRecipes() {
               src={ recipe.image }
               alt={ recipe.name }
               data-testid={ `${index}-horizontal-image` }
+              width="200px"
             />
-            <p data-testid={ `${index}-horizontal-top-text` }>{ recipe.category }</p>
+            {recipe.type === 'meal' ? (
+              <p data-testid={ `${index}-horizontal-top-text` }>
+                {`${recipe.nationality} - ${recipe.category}` }
+              </p>
+            ) : (
+              <p data-testid={ `${index}-horizontal-top-text` }>{ recipe.category }</p>
+            )}
             <p data-testid={ `${index}-horizontal-done-date` }>{ recipe.doneDate }</p>
             <button
               type="button"
               data-testid={ `${index}-horizontal-share-btn` }
+              src={ shareIcon }
               // onClick={ linkCopied }
             >
               Share
             </button>
-            <ul data-testid={ `${index}-${tagName}-horizontal-tag` }>
+            <ul>
               { recipe.tags.map((tag, i) => (
-                <li key={ `tag-${i}` }>tag</li>
+                <li key={ `tag-${i}` } data-testid={ `${index}-${tag}-horizontal-tag` }>
+                  { tag }
+                </li>
               ))}
             </ul>
           </div>
