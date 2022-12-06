@@ -1,18 +1,44 @@
-import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
 import Drinks from '../pages/Drinks';
 import { renderWithRouter } from './helpers/renderWith';
 
 const searchTopBtn = 'search-top-btn';
 const searchInputConst = 'search-input';
 const exercSearchBtn = 'exec-search-btn';
+const radioNameSearch = 'name-search-radio';
 
-const mockOneDrink = { drinks: [{
-  strDrink: 'Adam Sunrise',
-  strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/vtuyvu1472812112.jpg',
-  idDrink: '15567',
-}],
+const mockOneDrink = {
+  drinks: [{
+    strDrink: 'Adam Sunrise',
+    strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/vtuyvu1472812112.jpg',
+    idDrink: '15567',
+  }],
+};
+
+const mockFourDrinks = {
+  drinks: [{
+    strDrink: 'Adam',
+    strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
+    idDrink: '11007',
+  },
+  {
+    strDrink: 'Adam Bomb',
+    strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/2mcozt1504817403.jpg',
+    idDrink: '11008',
+  },
+  {
+    strDrink: 'Adam & Eve',
+    strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/urystu1472668972.jpg',
+    idDrink: '11009',
+  },
+  {
+    strDrink: 'Adam Sunrise',
+    strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/vtuyvu1472812112.jpg',
+    idDrink: '15567',
+  }],
 };
 
 describe('Testes do Drinks', () => {
@@ -68,7 +94,7 @@ describe('Testes do Drinks', () => {
         ok: true,
       }));
     userEvent.type(searchInput, 'water');
-    const radioIngredient = screen.getByTestId('name-search-radio');
+    const radioIngredient = screen.getByTestId(radioNameSearch);
     radioIngredient.checked = true;
     const btnSearchFetch = screen.getByTestId(exercSearchBtn);
     userEvent.click(btnSearchFetch);
@@ -114,28 +140,44 @@ describe('Testes do Drinks', () => {
     const btnSearchFetch = screen.getByTestId(exercSearchBtn);
     userEvent.click(btnSearchFetch);
     expect(global.alert).toHaveBeenCalled();
-    console.log(fetch);
   });
-  // test('Se um alert aparece quando não é encontrado nenhuma resposta', async () => {
-  //       renderWithRouter(<Drinks />);
+  test('Se uma mensagem de erro aparece quando não é encontrado nenhuma resposta', async () => {
+    renderWithRouter(<Drinks />);
 
-  //   const btnSearch = screen.getByTestId(searchTopBtn);
-  //   userEvent.click(btnSearch);
-  //   const searchInput = screen.getByTestId(searchInputConst);
-  //   const ingredient = screen.getByText(/Ingredient/i);
-  //   expect(ingredient).toBeInTheDocument();
-
-  //   jest.spyOn(global, 'alert');
-  //   // global.fetch = jest.fn()
-  //   //   .mockRejectedValue({});
-  //     userEvent.type(searchInput, 'xablau');
-
-  //   const radioIngredient = screen.getByTestId('ingredient-search-radio');
-  //   radioIngredient.checked = true;
-  //   const btnSearchFetch = screen.getByTestId(exercSearchBtn);
-  //   userEvent.click(btnSearchFetch);
-
-  //   // console.log(window.alert);
-  //   expect(global.alert).toHaveBeenCalled();
-  // });
+    const btnSearch = screen.getByTestId(searchTopBtn);
+    userEvent.click(btnSearch);
+    const searchInput = screen.getByTestId(searchInputConst);
+    userEvent.type(searchInput, 'wewrwer');
+    const nameSearchRadio = screen.getByTestId(radioNameSearch);
+    nameSearchRadio.checked = true;
+    expect(nameSearchRadio).toBeChecked();
+    const btnSearchFetch = screen.getByTestId(exercSearchBtn);
+    userEvent.click(btnSearchFetch);
+    const textAlert = await screen.findByText(/Cannot read properties of undefined/i);
+    expect(textAlert).toBeInTheDocument();
+  });
+  test('Se buscar por um drink de nome "Adam", será direcionado para a rota "/drinks/17873"', async () => {
+    renderWithRouter(<Drinks />);
+    global.fetch = jest.fn()
+      .mockResolvedValue(Promise.resolve({
+        json: () => Promise.resolve(mockFourDrinks),
+        ok: true,
+      }));
+    const btnSearch = screen.getByTestId(searchTopBtn);
+    userEvent.click(btnSearch);
+    const searchInput = screen.getByTestId('search-input');
+    userEvent.type(searchInput, 'Adam');
+    const nameSearchRadio = screen.getByTestId(radioNameSearch);
+    nameSearchRadio.checked = true;
+    expect(nameSearchRadio).toBeChecked();
+    const btnSearchFetch = screen.getByTestId('exec-search-btn');
+    const url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Adam';
+    act(() => {
+      userEvent.click(btnSearchFetch);
+      jest.advanceTimersByTime(2000);
+    });
+    expect(global.fetch).toHaveBeenCalledWith(url);
+    const drink = await screen.findByTestId('0-recipe-card');
+    expect(drink).toBeInTheDocument();
+  });
 });

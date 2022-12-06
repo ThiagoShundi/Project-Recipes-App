@@ -1,32 +1,44 @@
 .login-form {
-  border: none;
-  box-shadow: 0 0 10px white;
-  margin: auto;
-  max-width: 330px;
-  padding: 20px;
-  text-align: center;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
   width: 100%;
 }
 
-.login-form h1 {
+.formLogin {
+  align-items: center;
+  box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  justify-content: center;
+  width: 320px;
+}
+
+.formLogin h1 {
   color: white;
   font-size: 1.5em;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   text-shadow: 1px 1px 1px black;
 }
 
-.login-form input {
+.formLogin input {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 15px;
   margin-bottom: 10px;
   outline: none;
   padding: 10px;
-  width: 100%;
+  width: 90%;
 }
 
-.login-form button {
+.formLogin input:hover {
+  background-color: #e0ddd4;
+}
+
+.formLogin button {
   background: #c29825;
   border: none;
   border-radius: 4px;
@@ -35,26 +47,26 @@
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 20px;
   outline: none;
   padding: 10px;
   transition: all ease-in-out 0.3s;
-  width: 90%;
+  width: 250px;
 }
 
-.login-form button:hover {
+.formLogin button:hover {
   background: #e0a70a;
   color: white;
   scale: 1.1;
 }
 
-.login-form button:active {
+.formLogin button:active {
   box-shadow: 5px 5px 5px 5px white;
   color: white;
   scale: 0.9;
 }
 
-.login-form button:disabled {
+.formLogin button:disabled {
   background: #ccc;
   box-shadow: red 0 0 10px;
   color: rgb(255, 2, 2);

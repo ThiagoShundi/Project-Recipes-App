@@ -6,6 +6,8 @@ import FavoriteRecipes from './pages/FavoriteRecipes';
 import Profile from './pages/Profile';
 import Recipes from './pages/Recipes';
 import RecipeDetails from './pages/RecipeDetails';
+import RecipeSearchDrinks from './pages/RedirectSearchDrinks';
+import RecipeSearchMeals from './pages/RedirectSearchMeals';
 
 export default function Routes() {
   return (
@@ -22,6 +24,8 @@ export default function Routes() {
       <Route path="/drinks/:id" component={ RecipeDetails } />
       <Route path="/meals/:id/in-progress" />
       <Route path="/drinks/:id/in-progress" />
+      <Route exact path="/search/meals/:id" component={ RecipeSearchMeals } />
+      <Route exact path="/search/drinks/:id" component={ RecipeSearchDrinks } />
     </Switch>
   );
 }

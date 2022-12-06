@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
-import './RecipeDetails.css';
+import '../styles/RecipeDetails.css';
 
 export default function RecipeDetails() {
   const [isLoading, setIsLoading] = useState(true);
@@ -90,7 +90,7 @@ export default function RecipeDetails() {
   }
 
   return (
-    <div>
+    <div className="recipe-details">
       <h1>RecipeDetails</h1>
       { (dataRecipe.length > 0) && (
         <div>
