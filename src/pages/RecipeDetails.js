@@ -8,6 +8,7 @@ export default function RecipeDetails() {
   const [dataDrinks, setDataDrinks] = useState([]);
   const [dataMeals, setDataMeals] = useState([]);
   const [recomendation, setRecomendation] = useState([]);
+  const [btnInProgress, setBtnInProgress] = useState(false);
   // const [error, setError] = useState('');
   const location = useLocation();
   const sete = 7;
@@ -19,8 +20,16 @@ export default function RecipeDetails() {
   const SIX = 6;
 
   useEffect(() => {
+    let recipe = {};
+    const inProgressRecipes = localStorage.getItem('inProgressRecipes');
+    if (inProgressRecipes !== null) recipe = JSON.parse(inProgressRecipes);
+    const keysInProgress = Object.keys(recipe);
     if ((type === 'meals/')) {
       const id = location.pathname.slice(sete);
+      if (keysInProgress.includes('meals')) {
+        const keysMeals = Object.keys(recipe.meals);
+        setBtnInProgress(keysMeals.includes(`${id}`));
+      }
       const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
       const urlRecom = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       fetchDrinks(url)
@@ -36,6 +45,10 @@ export default function RecipeDetails() {
 
     if ((type === 'drinks')) {
       const id = location.pathname.slice(oito);
+      if (keysInProgress.includes('drinks')) {
+        const keysDrinks = Object.keys(recipe.drinks);
+        setBtnInProgress(keysDrinks.includes(`${id}`));
+      }
       const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
       const urlRecom = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
       fetchDrinks(url)
@@ -133,6 +146,9 @@ export default function RecipeDetails() {
             <iframe title="video" data-testid="video" src={ a } />
           )}
         </div>
+      )}
+      { btnInProgress && (
+        <button type="button" data-testid="start-recipe-btn">Continue Recipe</button>
       )}
       {recomendation.length === SIX && (
         <div className="allRecomendation">
