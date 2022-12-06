@@ -1,14 +1,15 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RecipeDetailsMeal from '../components/RecipeDetailsMeal';
+import RecipeDetails from '../pages/RecipeDetails';
 import mockMealDetails from './helpers/mockMealDetails';
 import { renderWithRouter } from './helpers/renderWith';
 
 describe('Testes da page RecipeDetailsMeals', () => {
-  it('Testa os componentes do RecipeDetails', () => {
-    const { history } = renderWithRouter(<RecipeDetailsMeal />);
+  it('Testa os componentes do RecipeDetails', async () => {
+    const { history } = renderWithRouter(<RecipeDetails />);
     history.push('/meals/52977');
-    expect(screen.getByRole('heading', { name: 'RecipeDetails' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'RecipeDetails' })).toBeInTheDocument();
     expect(screen.getByTestId('share-btn')).toBeInTheDocument();
     expect(screen.getByTestId('favorite-btn')).toBeInTheDocument();
     expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument();
