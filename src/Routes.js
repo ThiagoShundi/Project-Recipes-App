@@ -8,13 +8,14 @@ import Recipes from './pages/Recipes';
 import RecipeDetails from './pages/RecipeDetails';
 import RecipeSearchDrinks from './pages/RedirectSearchDrinks';
 import RecipeSearchMeals from './pages/RedirectSearchMeals';
+import RecipesInProgress from './pages/RecipeInProgress';
 
 export default function Routes() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="/meals/:id/in-progress" />
-      <Route path="/drinks/:id/in-progress" />
+      <Route path="/meals/:id/in-progress" component={ RecipesInProgress } />
+      <Route path="/drinks/:id/in-progress" component={ RecipesInProgress } />
       <Route path="/meals/:id-da-receita" component={ RecipeDetails } />
       <Route path="/drinks/:id-da-receita" component={ RecipeDetails } />
       <Route path="/done-recipes" component={ DoneRecipes } />

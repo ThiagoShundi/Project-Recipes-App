@@ -150,6 +150,8 @@ export default function RecipeDetails() {
       { btnInProgress && (
         <button type="button" data-testid="start-recipe-btn">Continue Recipe</button>
       )}
+      <button type="button" data-testid="share-btn">Share</button>
+      <button type="button" data-testid="favorite-btn">Favorite</button>
       {recomendation.length === SIX && (
         <div className="allRecomendation">
           {recomendation.map((ele, ind) => (
