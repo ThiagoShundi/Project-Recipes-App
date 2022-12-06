@@ -107,6 +107,34 @@ export default function RecipeDetails() {
     }, mil);
   };
 
+  const outro = () => {
+    const getFavoritesLocalStorage = localStorage
+      .getItem('favoriteRecipes') ? JSON
+        .parse(localStorage.getItem('favoriteRecipes')) : [];
+    // console.log(getFavoritesLocalStorage);
+    const newFavorite = {};
+    if (dataMeals.length > 0) {
+      newFavorite.id = dataMeals[0].idMeal;
+      newFavorite.type = 'meal';
+      newFavorite.nationality = dataMeals[0].strArea;
+      newFavorite.category = dataMeals[0].strCategory;
+      newFavorite.alcoholicOrNot = '';
+      newFavorite.name = dataMeals[0].strMeal;
+      newFavorite.image = dataMeals[0].strMealThumb;
+    }
+    if (dataDrinks.length > 0) {
+      newFavorite.id = dataDrinks[0].idDrink;
+      newFavorite.type = 'drink';
+      newFavorite.nationality = '';
+      newFavorite.category = dataDrinks[0].strCategory;
+      newFavorite.alcoholicOrNot = dataDrinks[0].strAlcoholic;
+      newFavorite.name = dataDrinks[0].strDrink;
+      newFavorite.image = dataDrinks[0].strDrinkThumb;
+    }
+    const allFavorites = [...getFavoritesLocalStorage, newFavorite];
+    localStorage.setItem('favoriteRecipes', JSON.stringify(allFavorites));
+  };
+
   return (
     <div className="recipe-details">
       <h1>RecipeDetails</h1>
@@ -163,7 +191,7 @@ export default function RecipeDetails() {
         Share
       </button>
       {btnShare && <span>Link copied!</span>}
-      <button type="button" data-testid="favorite-btn">Favorite</button>
+      <button type="button" data-testid="favorite-btn" onClick={ outro }>Favorite</button>
       {recomendation.length === SIX && (
         <div className="allRecomendation">
           {recomendation.map((ele, ind) => (

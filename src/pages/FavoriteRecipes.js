@@ -100,7 +100,7 @@ function FavoriteRecipes() {
                 type="button"
                 data-testid={ `${indexMeal}-horizontal-share-btn` }
                 src={ shareIcon }
-                onClick={ (event) => linkCopied(event) }
+                onClick={ linkCopied }
               >
                 <img
                   src={ shareIcon }
