@@ -16,6 +16,7 @@ export default function RecipeDetailsMeal() {
   let a = '';
   const SIX = 6;
   const errorMessage = 'Um erro inesperado ocorreu';
+
   useEffect(() => {
     let recipe = {};
     const sete = 7;
@@ -38,7 +39,7 @@ export default function RecipeDetailsMeal() {
     fetchDrinks(urlRecom)
       .then((response) => setRecomendation(response.drinks.slice(0, SIX)))
       .catch(() => console.log(errorMessage));
-  }, []);
+  }, [location.pathname]);
 
   if (dataMeals.length > 0) {
     dataRecipe = dataMeals;

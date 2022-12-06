@@ -34,7 +34,7 @@ export default function ProgressDetailsMeals() {
       .then((response) => setDataMealsInProgress(response.meals))
       .catch(() => console.log(errorMessage))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [location.pathname]);
 
   const linkCopied = () => {
     const mil = 1000;

@@ -33,7 +33,7 @@ export default function ProgressDetailsDrinks() {
       .then((response) => setDataDrinksInProgress(response.drinks))
       .catch(() => console.log(errorMessage))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [location.pathname]);
 
   const linkCopied = () => {
     const mil = 1000;

@@ -37,7 +37,7 @@ export default function RecipeDetailsDrink() {
     fetchDrinks(urlRecom)
       .then((response) => setRecomendation(response.meals.slice(0, SIX)))
       .catch(() => console.log(errorMessage));
-  }, []);
+  }, [location.pathname]);
 
   if (dataDrinks.length > 0) {
     dataRecipe = dataDrinks;
