@@ -1,12 +1,12 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import RecipeDetails from '../pages/RecipeDetails';
+import RecipeDetailsDrink from '../components/RecipeDetailsDrink';
 import mockDrinkDetails from './helpers/mockDrinkDetails';
 import { renderWithRouter } from './helpers/renderWith';
 
 describe('Testes da page RecipeDetailsMeals', () => {
   it('Testa os componentes do RecipeDetails', () => {
-    const { history } = renderWithRouter(<RecipeDetails />);
+    const { history } = renderWithRouter(<RecipeDetailsDrink />);
     history.push('/meals/52977');
     expect(screen.getByRole('heading', { name: 'RecipeDetails' })).toBeInTheDocument();
     expect(screen.getByTestId('share-btn')).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('Testes da page RecipeDetailsMeals', () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve(mockDrinkDetails),
     }));
-    const { history } = renderWithRouter(<RecipeDetails />);
+    const { history } = renderWithRouter(<RecipeDetailsDrink />);
     history.push('/drinks/15997');
     const recipePhoto = await screen.findByTestId('recipe-photo');
     expect(recipePhoto).toBeInTheDocument();
