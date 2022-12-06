@@ -4,6 +4,7 @@ function ButtonSearch() {
   return (
     <label htmlFor="search">
       Search
+      {' '}
       <input
         id="search"
         type="search"

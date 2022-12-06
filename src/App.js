@@ -1,12 +1,18 @@
 import React from 'react';
 import './App.css';
+import { createBrowserHistory } from 'history';
 import Routes from './Routes';
+import { FilterProvider } from './context/InfoContext';
+
+const history = createBrowserHistory();
 
 function App() {
   return (
-    <div className="meals">
-      <Routes />
-    </div>
+    <FilterProvider>
+      <div className="App">
+        <Routes history={ history } />
+      </div>
+    </FilterProvider>
   );
 }
 

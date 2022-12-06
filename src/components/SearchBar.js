@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import { FilterContextState } from '../context/InfoContext';
 
 function SearchBar({ title }) {
-  const [redirectIdMeal, setRedirectIdMeal] = useState(false);
-  const [idMeal, setIdMeal] = useState('');
+  const { dispatch } = useContext(FilterContextState) || {};
   const [redirectIdDrink, setRedirectIdDrink] = useState(false);
+  const [redirectIdMeal, setRedirectIdMeal] = useState(false);
+
+  const [redirectSearchDrink, setRedirectSearchDrink] = useState(false);
+  const [redirectSearchMeal, setRedirectSearchMeal] = useState(false);
+
+  const [idMeal, setIdMeal] = useState('');
   const [idDrink, setIdDrink] = useState('');
+
   if (redirectIdMeal) return <Redirect to={ `/meals/${idMeal}` } />;
   if (redirectIdDrink) return <Redirect to={ `/drinks/${idDrink}` } />;
+  if (redirectSearchDrink) return <Redirect to={ `/search/drinks/${idDrink}` } />;
+  if (redirectSearchMeal) return <Redirect to={ `/search/meals/${idMeal}` } />;
 
   const fetchApiMeals = async () => {
     let http = '';
@@ -31,7 +40,12 @@ function SearchBar({ title }) {
         if (repos.meals.length === 1) {
           setIdMeal(repos.meals[0].idMeal);
           setRedirectIdMeal(true);
+        } if (repos.meals.length > 1) {
+          setIdMeal(repos.meals[0].idMeal);
+          setRedirectSearchMeal(true);
         }
+        console.log(repos.meals);
+        dispatch({ type: 'ADD_FILTER-MEALS', payload: repos.meals });
       } else {
         global.alert('Your search must have only 1 (one) character');
       }
@@ -60,8 +74,12 @@ function SearchBar({ title }) {
         if (repos.drinks.length === 1) {
           setIdDrink(repos.drinks[0].idDrink);
           setRedirectIdDrink(true);
+        } if (repos.drinks.length > 1) {
+          setIdDrink(repos.drinks[0].idDrink);
+          setRedirectSearchDrink(true);
         }
-        console.log(repos);
+        console.log(repos.drinks);
+        dispatch({ type: 'ADD_FILTER-DRINKS', payload: repos.drinks });
       } else {
         global.alert('Your search must have only 1 (one) character');
       }
@@ -72,22 +90,28 @@ function SearchBar({ title }) {
 
   const fetchApi = async (titleFetch) => {
     if (titleFetch === 'Meals') {
-      fetchApiMeals();
+      await fetchApiMeals();
     }
     if (titleFetch === 'Drinks') {
-      fetchApiDrinks();
+      await fetchApiDrinks();
     }
   };
 
   return (
-    <>
+    <div className="search-radios">
       <label htmlFor="type">
         <input name="type" type="radio" data-testid="ingredient-search-radio" />
+        {' '}
         <span>Ingredient</span>
+        {' '}
         <input name="type" type="radio" data-testid="name-search-radio" />
+        {' '}
         <span>Name</span>
+        {' '}
         <input name="type" type="radio" data-testid="first-letter-search-radio" />
+        {' '}
         <span>First Letter</span>
+        {' '}
       </label>
       <button
         type="button"
@@ -96,7 +120,7 @@ function SearchBar({ title }) {
       >
         Search
       </button>
-    </>
+    </div>
   );
 }
 
