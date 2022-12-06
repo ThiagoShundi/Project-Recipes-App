@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipeDetails.css';
 
 export default function RecipeDetailsDrink() {
@@ -9,20 +11,21 @@ export default function RecipeDetailsDrink() {
   const [recomendation, setRecomendation] = useState([]);
   const [btnInProgress, setBtnInProgress] = useState(false);
   const [btnShare, setBtnShare] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const location = useLocation();
   let dataRecipe = [];
   let ingredients = [];
   const SIX = 6;
+  const oito = 8;
+  const id = location.pathname.slice(oito);
   const errorMessage = 'Um erro inesperado ocorreu';
+
   useEffect(() => {
     let recipe = {};
-    const oito = 8;
     const inProgressRecipes = localStorage.getItem('inProgressRecipes');
     if (inProgressRecipes !== null) recipe = JSON.parse(inProgressRecipes);
     const keysInProgress = Object.keys(recipe);
-
-    const id = location.pathname.slice(oito);
     if (keysInProgress.includes('drinks')) {
       const keysDrinks = Object.keys(recipe.drinks);
       setBtnInProgress(keysDrinks.includes(`${id}`));
@@ -37,7 +40,20 @@ export default function RecipeDetailsDrink() {
     fetchDrinks(urlRecom)
       .then((response) => setRecomendation(response.meals.slice(0, SIX)))
       .catch(() => console.log(errorMessage));
-  }, []);
+
+    const getFavoritesLocalStorage = localStorage
+      .getItem('favoriteRecipes') ? JSON
+        .parse(localStorage.getItem('favoriteRecipes')) : [];
+
+    if (getFavoritesLocalStorage.length > 0) {
+      const keysDrinks = getFavoritesLocalStorage
+        .filter((favorite) => favorite.type === 'drink');
+      if (keysDrinks.length > 0) {
+        const isFav = keysDrinks.find((drink) => drink.id === id);
+        setIsFavorite(isFav);
+      }
+    }
+  }, [id]);
 
   if (dataDrinks.length > 0) {
     dataRecipe = dataDrinks;
@@ -64,13 +80,17 @@ export default function RecipeDetailsDrink() {
     }, mil);
   };
 
-  const outro = () => {
+  const favorite = () => {
     const getFavoritesLocalStorage = localStorage
       .getItem('favoriteRecipes') ? JSON
         .parse(localStorage.getItem('favoriteRecipes')) : [];
-    // console.log(getFavoritesLocalStorage);
     const newFavorite = {};
-    if (dataDrinks.length > 0) {
+    let allFavorites = [];
+    if (isFavorite) {
+      allFavorites = getFavoritesLocalStorage.filter((getFav) => getFav.id !== id);
+      setIsFavorite(false);
+    }
+    if ((dataDrinks.length > 0) && !isFavorite) {
       newFavorite.id = dataDrinks[0].idDrink;
       newFavorite.type = 'drink';
       newFavorite.nationality = '';
@@ -78,8 +98,9 @@ export default function RecipeDetailsDrink() {
       newFavorite.alcoholicOrNot = dataDrinks[0].strAlcoholic;
       newFavorite.name = dataDrinks[0].strDrink;
       newFavorite.image = dataDrinks[0].strDrinkThumb;
+      setIsFavorite(true);
+      allFavorites = [...getFavoritesLocalStorage, newFavorite];
     }
-    const allFavorites = [...getFavoritesLocalStorage, newFavorite];
     localStorage.setItem('favoriteRecipes', JSON.stringify(allFavorites));
   };
 
@@ -124,7 +145,14 @@ export default function RecipeDetailsDrink() {
         Share
       </button>
       {btnShare && <span>Link copied!</span>}
-      <button type="button" data-testid="favorite-btn" onClick={ outro }>Favorite</button>
+      <button
+        type="button"
+        data-testid="favorite-btn"
+        onClick={ favorite }
+        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+      >
+        <img src={ isFavorite ? blackHeartIcon : whiteHeartIcon } alt="heart" />
+      </button>
       {recomendation.length === SIX && (
         <div className="allRecomendation">
           {recomendation.map((ele, ind) => (
