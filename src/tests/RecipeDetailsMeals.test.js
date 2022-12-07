@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RecipeDetailsMeal from '../components/RecipeDetailsMeal';
-// import RecipeDetails from '../pages/RecipeDetails';
+import RecipeDetails from '../pages/RecipeDetails';
 import mockMealDetails from './helpers/mockMealDetails';
 import { renderWithRouter } from './helpers/renderWith';
 
