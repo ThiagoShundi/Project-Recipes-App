@@ -60,7 +60,9 @@ export default function RecipeDetailsDrink() {
     const keysData = Object.keys(dataDrinks[0]);
     const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
     const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
-    const valuesIng = ingredientsFilter.filter((ingre) => dataDrinks[0][ingre] !== null);
+    const valuesIng = ingredientsFilter
+      .filter((ingre) => (
+        dataDrinks[0][ingre] !== null) && (dataDrinks[0][ingre] !== ''));
     const valuesMen = meansureFilter.filter((ingre) => dataDrinks[0][ingre] !== null);
     valuesIng.forEach((add, index) => {
       let newValue = '';
