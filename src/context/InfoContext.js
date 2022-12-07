@@ -4,6 +4,7 @@ import { createContext, useMemo, useReducer } from 'react';
 const INITIAL_STATE = {
   searchInputRecipesDrinks: [],
   searchInputRecipesMeals: [],
+  progressDataDrinks: [],
 };
 
 const FilterContextState = createContext();

@@ -53,7 +53,7 @@ export default function RecipeDetailsDrink() {
         setIsFavorite(isFav);
       }
     }
-  }, [id]);
+  }, [id, location.pathname]);
 
   if (dataDrinks.length > 0) {
     dataRecipe = dataDrinks;

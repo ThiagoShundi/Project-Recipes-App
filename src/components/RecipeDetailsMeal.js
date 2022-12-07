@@ -55,7 +55,7 @@ export default function RecipeDetailsMeal() {
         setIsFavorite(isFav);
       }
     }
-  }, [id]);
+  }, [id, location.pathname]);
 
   if (dataMeals.length > 0) {
     dataRecipe = dataMeals;

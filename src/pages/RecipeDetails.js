@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import RecipeDetailsDrink from '../components/RecipeDetailsDrink';
-import RecipeDetailsMeal from '../components/RecipeDetailsMeal';
+import RecipeDetailsDrinks from '../components/RecipeDetailsDrink';
+import RecipeDetailsMeals from '../components/RecipeDetailsMeal';
 import '../styles/RecipeDetails.css';
 
 export default function RecipeDetails() {
@@ -9,11 +9,11 @@ export default function RecipeDetails() {
   const sete = 7;
   const type = location.pathname.slice(0, sete);
   if (type === '/meals/') {
-    return <RecipeDetailsMeal />;
+    return <RecipeDetailsMeals />;
   }
   if (type === '/drinks') {
     return (
-      <RecipeDetailsDrink />
+      <RecipeDetailsDrinks />
     );
   }
 }

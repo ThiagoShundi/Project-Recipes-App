@@ -26,7 +26,7 @@ describe('Testes da page RecipeDetailsMeals', () => {
     expect(recipeTitle).toBeInTheDocument();
     const recipeCategory = await screen.findByTestId('recipe-category');
     expect(recipeCategory).toBeInTheDocument();
-    for (let i = 0; i <= 19; i += 1) {
+    for (let i = 0; i <= 12; i += 1) {
       expect(screen.getByTestId(`${i}-ingredient-name-and-measure`)).toBeInTheDocument();
     }
     const instructions = screen.getByTestId('instructions');
