@@ -6,7 +6,7 @@ function DoneRecipes() {
   const getDoneRecipes = localStorage
     .getItem('doneRecipes') ? JSON
       .parse(localStorage.getItem('doneRecipes')) : [];
-  console.log(getDoneRecipes);
+  // console.log(getDoneRecipes);
 
   // if (getDoneRecipes.length > 0) {
   //   const drinks = getDoneRecipes.filter((drink) => drink.type === 'drink');
@@ -21,7 +21,7 @@ function DoneRecipes() {
       <button type="button" data-testid="filter-by-drink-btn">Drinks</button>
       {getDoneRecipes.length > 0 && (
         getDoneRecipes.map((recipe, index) => (
-          <div key={ index }>
+          <div data-testid="done-recipes" key={ index }>
             <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
             <img
               src={ recipe.image }
@@ -37,6 +37,11 @@ function DoneRecipes() {
               <p data-testid={ `${index}-horizontal-top-text` }>{ recipe.category }</p>
             )}
             <p data-testid={ `${index}-horizontal-done-date` }>{ recipe.doneDate }</p>
+            {recipe.type === 'drink' && (
+              <p data-testid={ `${index}-horizontal-top-text` }>
+                { recipe.alcoholicOrNot }
+              </p>
+            )}
             <button
               type="button"
               data-testid={ `${index}-horizontal-share-btn` }
