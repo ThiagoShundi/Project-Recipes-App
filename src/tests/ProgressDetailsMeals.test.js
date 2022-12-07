@@ -1,40 +1,32 @@
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import RecipeDetailsMeal from '../components/RecipeDetailsMeal';
-// import RecipeDetails from '../pages/RecipeDetails';
+import ProgressDetailsMeals from '../components/ProgressDetailMeals';
 import mockMealDetails from './helpers/mockMealDetails';
 import { renderWithRouter } from './helpers/renderWith';
 
-describe('Testes da page RecipeDetailsMeals', () => {
+describe('Testes da page ProgressDetailsDrink', () => {
   it('Testa os componentes do RecipeDetails', () => {
-    const { history } = renderWithRouter(<RecipeDetailsMeal />);
-    history.push('/meals/52977');
-    expect(screen.getByRole('heading', { name: 'RecipeDetails' })).toBeInTheDocument();
+    const { history } = renderWithRouter(<ProgressDetailsMeals />);
+    history.push('/meals/52977/in-progress');
+    expect(screen.getByRole('heading', { name: 'ProgressMeals' })).toBeInTheDocument();
     expect(screen.getByTestId('share-btn')).toBeInTheDocument();
     expect(screen.getByTestId('favorite-btn')).toBeInTheDocument();
-    expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument();
   });
   it('Testa se possui os componentes de imagem, titulo, categoria, etc', async () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve(mockMealDetails),
     }));
-    const { history } = renderWithRouter(<RecipeDetailsMeal />);
-    history.push('/meals/52977');
+    const { history } = renderWithRouter(<ProgressDetailsMeals />);
+    history.push('/meals/52977/in-progress');
     const recipePhoto = await screen.findByTestId('recipe-photo');
     expect(recipePhoto).toBeInTheDocument();
     const recipeTitle = await screen.findByTestId('recipe-title');
     expect(recipeTitle).toBeInTheDocument();
     const recipeCategory = await screen.findByTestId('recipe-category');
     expect(recipeCategory).toBeInTheDocument();
-    for (let i = 0; i <= 12; i += 1) {
-      expect(screen.getByTestId(`${i}-ingredient-name-and-measure`)).toBeInTheDocument();
+    for (let i = 0; i <= 2; i += 1) {
+      expect(screen.getByTestId(`${i}-ingredient-step`)).toBeInTheDocument();
     }
     const instructions = screen.getByTestId('instructions');
     expect(instructions).toBeInTheDocument();
-    const video = screen.getByTestId('video');
-    expect(video).toBeInTheDocument();
-    const startRecipeBtn = screen.getByTestId('start-recipe-btn');
-    userEvent.click(startRecipeBtn);
-    expect(history.location.pathname).toBe('/meals/52977/in-progress');
   });
 });

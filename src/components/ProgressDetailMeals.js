@@ -6,12 +6,26 @@ export default function ProgressDetailsMeals() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataMealsInProgress, setDataMealsInProgress] = useState([]);
   const [btnShare, setBtnShare] = useState(false);
+  const [verifiedElements, setVerifiedElements] = useState([]);
 
   const location = useLocation();
   let dataProgress = [];
   let ingredients = [];
   const a = '';
   const errorMessage = 'Um erro inesperado ocorreu';
+
+  useEffect(() => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
+  }, [verifiedElements]);
+
+  const verifyElement = ({ target: { checked, id } }) => {
+    if (checked) {
+      setVerifiedElements([...verifiedElements, id]);
+    }
+    if (checked === false) {
+      setVerifiedElements(verifiedElements.filter((ele) => ele !== id));
+    }
+  };
 
   useEffect(() => {
     let recipe = {};
@@ -108,8 +122,15 @@ export default function ProgressDetailsMeals() {
                 <label
                   data-testid={ `${index}-ingredient-step` }
                   htmlFor={ ing }
+                  className={ verifiedElements
+                    .some((element) => element === ing) ? 'checked' : 'noChecked' }
                 >
-                  <input type="checkbox" name={ ing } />
+                  <input
+                    onClick={ (event) => verifyElement(event) }
+                    type="checkbox"
+                    id={ ing }
+                    name={ ing }
+                  />
                   {ing}
                 </label>
               </div>

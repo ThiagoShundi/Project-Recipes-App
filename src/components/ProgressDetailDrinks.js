@@ -1,16 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
+import '../styles/ProgressDetails.css';
 
 export default function ProgressDetailsDrinks() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataDrinksInProgress, setDataDrinksInProgress] = useState([]);
   const [btnShare, setBtnShare] = useState(false);
+  const [verifiedElements, setVerifiedElements] = useState([]);
 
   const location = useLocation();
   let dataProgress = [];
   let ingredients = [];
+
   const errorMessage = 'Um erro inesperado ocorreu';
+
+  console.log(verifiedElements);
+
+  useEffect(() => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
+  }, [verifiedElements]);
+
+  const verifyElement = ({ target: { checked, id } }) => {
+    if (checked) {
+      setVerifiedElements([...verifiedElements, id]);
+    }
+    if (checked === false) {
+      setVerifiedElements(verifiedElements.filter((ele) => ele !== id));
+    }
+  };
 
   useEffect(() => {
     let recipe = {};
@@ -110,8 +128,15 @@ export default function ProgressDetailsDrinks() {
                 <label
                   data-testid={ `${index}-ingredient-step` }
                   htmlFor={ ing }
+                  className={ verifiedElements
+                    .some((element) => element === ing) ? 'checked' : 'noChecked' }
                 >
-                  <input type="checkbox" id={ ing } name={ ing } />
+                  <input
+                    onClick={ (event) => verifyElement(event) }
+                    type="checkbox"
+                    id={ ing }
+                    name={ ing }
+                  />
                   {ing}
                 </label>
               </div>
