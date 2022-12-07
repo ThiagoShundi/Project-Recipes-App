@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipeDetails.css';
 
 export default function RecipeDetailsMeal() {
@@ -9,18 +11,19 @@ export default function RecipeDetailsMeal() {
   const [recomendation, setRecomendation] = useState([]);
   const [btnInProgress, setBtnInProgress] = useState(false);
   const [btnShare, setBtnShare] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const location = useLocation();
   let dataRecipe = [];
   let ingredients = [];
   let a = '';
   const SIX = 6;
+  const sete = 7;
+  const id = location.pathname.slice(sete);
   const errorMessage = 'Um erro inesperado ocorreu';
 
   useEffect(() => {
     let recipe = {};
-    const sete = 7;
-    const id = location.pathname.slice(sete);
     const inProgressRecipes = localStorage.getItem('inProgressRecipes');
     if (inProgressRecipes !== null) recipe = JSON.parse(inProgressRecipes);
     const keysInProgress = Object.keys(recipe);
@@ -39,7 +42,20 @@ export default function RecipeDetailsMeal() {
     fetchDrinks(urlRecom)
       .then((response) => setRecomendation(response.drinks.slice(0, SIX)))
       .catch(() => console.log(errorMessage));
-  }, [location.pathname]);
+
+    const getFavoritesLocalStorage = localStorage
+      .getItem('favoriteRecipes') ? JSON
+        .parse(localStorage.getItem('favoriteRecipes')) : [];
+
+    if (getFavoritesLocalStorage.length > 0) {
+      const keysMeals = getFavoritesLocalStorage
+        .filter((favorite) => favorite.type === 'meal');
+      if (keysMeals.length > 0) {
+        const isFav = keysMeals.find((meal) => meal.id === id);
+        setIsFavorite(isFav);
+      }
+    }
+  }, [id, location.pathname]);
 
   if (dataMeals.length > 0) {
     dataRecipe = dataMeals;
@@ -50,7 +66,7 @@ export default function RecipeDetailsMeal() {
     const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
     const valuesIng = ingredientsFilter
       .filter((ingre) => (dataMeals[0][ingre] !== null) && (dataMeals[0][ingre] !== ''));
-    const valuesMen = meansureFilter.filter((ingre) => dataMeals[0][ingre] !== null);
+    const valuesMen = meansureFilter.filter((ingre) => (dataMeals[0][ingre] !== null));
     valuesIng.forEach((add, index) => {
       let newValue = '';
       if (dataMeals[0][valuesMen[index]] !== undefined) {
@@ -69,12 +85,17 @@ export default function RecipeDetailsMeal() {
     }, mil);
   };
 
-  const outro = () => {
+  const favorite = () => {
     const getFavoritesLocalStorage = localStorage
       .getItem('favoriteRecipes') ? JSON
         .parse(localStorage.getItem('favoriteRecipes')) : [];
     const newFavorite = {};
-    if (dataMeals.length > 0) {
+    let allFavorites = [];
+    if (isFavorite) {
+      allFavorites = getFavoritesLocalStorage.filter((getFav) => getFav.id !== id);
+      setIsFavorite(false);
+    }
+    if ((dataMeals.length > 0) && !isFavorite) {
       newFavorite.id = dataMeals[0].idMeal;
       newFavorite.type = 'meal';
       newFavorite.nationality = dataMeals[0].strArea;
@@ -82,8 +103,9 @@ export default function RecipeDetailsMeal() {
       newFavorite.alcoholicOrNot = '';
       newFavorite.name = dataMeals[0].strMeal;
       newFavorite.image = dataMeals[0].strMealThumb;
+      setIsFavorite(true);
+      allFavorites = [...getFavoritesLocalStorage, newFavorite];
     }
-    const allFavorites = [...getFavoritesLocalStorage, newFavorite];
     localStorage.setItem('favoriteRecipes', JSON.stringify(allFavorites));
   };
 
@@ -127,7 +149,14 @@ export default function RecipeDetailsMeal() {
         Share
       </button>
       {btnShare && <span>Link copied!</span>}
-      <button type="button" data-testid="favorite-btn" onClick={ outro }>Favorite</button>
+      <button
+        type="button"
+        data-testid="favorite-btn"
+        onClick={ favorite }
+        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+      >
+        <img src={ isFavorite ? blackHeartIcon : whiteHeartIcon } alt="heart" />
+      </button>
       {recomendation.length === SIX && (
         <div className="allRecomendation">
           {recomendation.map((ele, ind) => (
