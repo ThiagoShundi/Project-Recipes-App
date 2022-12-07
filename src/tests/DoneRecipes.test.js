@@ -32,18 +32,33 @@ const mockDoneRecipes = [
 ];
 
 describe('Testes da page DoneRecipes', () => {
+  beforeEach(() => {
+    navigator.clipboard = {
+      writeText: jest.fn(),
+    };
+  });
   localStorage.setItem('doneRecipes', JSON.stringify(mockDoneRecipes));
   it('Componentes do localStorage estão sendo renderizados', () => {
     renderWithRouter(<DoneRecipes />);
     const penne = screen.getByText('Spicy Arrabiata Penne');
     expect(penne).toBeInTheDocument();
   });
-  it('Componentes do localStorage estão sendo renderizados', () => {
-    localStorage.clear();
+  it('Link copiado', async () => {
     renderWithRouter(<DoneRecipes />);
-    // expect(screen.getByTestId('done-recipes')).not.toBeInTheDocument();
+    const btnShare = screen.getByTestId('0-horizontal-share-btn');
+    userEvent.click(btnShare);
+    const linkCopied = screen.getAllByTestId('link-copied');
+    expect(linkCopied[0]).toBeInTheDocument();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+      // return 1;
+    });
+    expect(linkCopied[0]).not.toBeInTheDocument();
+    expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/meals/52771');
   });
   it('Deve ter um titulo Done Recipes e um botão para ir ao profile', async () => {
+    localStorage.clear();
     const { history } = renderWithRouter(<DoneRecipes />);
     const doneRecipesTitle = screen.getByRole('heading', { level: 1, name: 'Done Recipes' });
     expect(doneRecipesTitle).toBeInTheDocument();
@@ -53,5 +68,31 @@ describe('Testes da page DoneRecipes', () => {
     expect(profileImage).toBeInTheDocument();
     userEvent.click(profileButton);
     await waitFor(() => expect(history.location.pathname).toBe('/profile'));
+  });
+  it('Filtros funcionam', async () => {
+    localStorage.setItem('doneRecipes', JSON.stringify(mockDoneRecipes));
+    renderWithRouter(<DoneRecipes />);
+    const namePenne = screen.getByTestId('0-horizontal-name');
+    const nameAquamarine = screen.getByTestId('1-horizontal-name');
+    expect(namePenne).toBeInTheDocument();
+    expect(nameAquamarine).toBeInTheDocument();
+
+    const btnMeal = screen.getByTestId('filter-by-meal-btn');
+    userEvent.click(btnMeal);
+
+    expect(namePenne).toBeInTheDocument();
+    expect(nameAquamarine).not.toBeInTheDocument();
+
+    const btnDrinks = screen.getByTestId('filter-by-drink-btn');
+    userEvent.click(btnDrinks);
+
+    expect(namePenne.textContent).toBe('Aquamarine');
+
+    const btnAll = screen.getByTestId('filter-by-all-btn');
+    userEvent.click(btnAll);
+
+    const nameAquamarine2 = screen.getByTestId('1-horizontal-name');
+    expect(namePenne).toBeInTheDocument();
+    expect(nameAquamarine2).toBeInTheDocument();
   });
 });
