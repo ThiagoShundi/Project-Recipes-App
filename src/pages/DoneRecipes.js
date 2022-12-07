@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import HeaderNoSearch from '../components/HeaderNoSearch';
 import shareIcon from '../images/shareIcon.svg';
 
@@ -41,13 +42,15 @@ function DoneRecipes() {
         getDoneRecipes.filter((filter) => filter.type !== filters)
           .map((recipe, index) => (
             <div data-testid="done-recipes" key={ index }>
-              <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
-              <img
-                src={ recipe.image }
-                alt={ recipe.name }
-                data-testid={ `${index}-horizontal-image` }
-                width="200px"
-              />
+              <Link to={ `/${recipe.type}s/${recipe.id}` }>
+                <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
+                <img
+                  src={ recipe.image }
+                  alt={ recipe.name }
+                  data-testid={ `${index}-horizontal-image` }
+                  width="200px"
+                />
+              </Link>
               {recipe.type === 'meal' ? (
                 <p data-testid={ `${index}-horizontal-top-text` }>
                   {`${recipe.nationality} - ${recipe.category}` }
