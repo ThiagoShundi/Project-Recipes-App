@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import HeaderNoSearch from '../components/HeaderNoSearch';
 import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
+  const [btnShare, setBtnShare] = useState(false);
+
   const getDoneRecipes = localStorage
     .getItem('doneRecipes') ? JSON
       .parse(localStorage.getItem('doneRecipes')) : [];
@@ -12,6 +14,15 @@ function DoneRecipes() {
   //   const drinks = getDoneRecipes.filter((drink) => drink.type === 'drink');
   //   const meals = getDoneRecipes.filter((meal) => meal.type === 'meal');
   // }
+
+  const linkCopied = ({ target }) => {
+    const mil = 1000;
+    setBtnShare(true);
+    navigator.clipboard.writeText(`http://localhost:3000/${target.name}`);
+    setTimeout(() => {
+      setBtnShare(false);
+    }, mil);
+  };
 
   return (
     <div>
@@ -43,13 +54,15 @@ function DoneRecipes() {
               </p>
             )}
             <button
+              name={ `${recipe.type}s/${recipe.id}` }
               type="button"
               data-testid={ `${index}-horizontal-share-btn` }
               src={ shareIcon }
-              // onClick={ linkCopied }
+              onClick={ linkCopied }
             >
               Share
             </button>
+            {btnShare && <span>Link copied!</span>}
             <ul>
               { recipe.tags.map((tag, i) => (
                 <li key={ `tag-${i}` } data-testid={ `${index}-${tag}-horizontal-tag` }>
