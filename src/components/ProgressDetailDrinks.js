@@ -15,12 +15,6 @@ export default function ProgressDetailsDrinks() {
 
   const errorMessage = 'Um erro inesperado ocorreu';
 
-  console.log(verifiedElements);
-
-  useEffect(() => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
-  }, [verifiedElements]);
-
   const verifyElement = ({ target: { checked, id } }) => {
     if (checked) {
       setVerifiedElements([...verifiedElements, id]);
@@ -31,6 +25,11 @@ export default function ProgressDetailsDrinks() {
   };
 
   useEffect(() => {
+    const local = localStorage.getItem('inProgressRecipes');
+    if (local !== null) {
+      setVerifiedElements(JSON.parse(local));
+    }
+
     let recipe = {};
     const oito = 8;
 
@@ -52,6 +51,13 @@ export default function ProgressDetailsDrinks() {
       .catch(() => console.log(errorMessage))
       .finally(() => setIsLoading(false));
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (verifiedElements.length > 0) {
+      console.log(verifiedElements);
+      localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
+    }
+  }, [verifiedElements]);
 
   const linkCopied = () => {
     const mil = 1000;
@@ -136,6 +142,8 @@ export default function ProgressDetailsDrinks() {
                     type="checkbox"
                     id={ ing }
                     name={ ing }
+                    checked={ verifiedElements
+                      .some((element) => element === ing) }
                   />
                   {ing}
                 </label>
