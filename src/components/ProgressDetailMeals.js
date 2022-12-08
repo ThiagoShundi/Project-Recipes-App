@@ -15,7 +15,7 @@ export default function ProgressDetailsMeals() {
   const location = useLocation();
   let dataProgress = [];
   let ingredients = [];
-  const a = '';
+  let a = '';
   const errorMessage = 'Um erro inesperado ocorreu';
 
   const verifyElement = ({ target: { checked, id } }) => {
@@ -122,6 +122,8 @@ export default function ProgressDetailsMeals() {
 
   if (dataMealsInProgress.length > 0) {
     dataProgress = dataMealsInProgress;
+    const ytVideo = dataProgress[0].strYoutube;
+    a = ytVideo.replace('watch?v=', 'embed/');
     const keysData = Object.keys(dataMealsInProgress[0]);
     const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
     const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
