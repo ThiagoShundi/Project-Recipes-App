@@ -10,6 +10,7 @@ export default function ProgressDetailsMeals() {
   const [btnShare, setBtnShare] = useState(false);
   const [verifiedElements, setVerifiedElements] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isDone, setIsDone] = useState(false);
 
   const location = useLocation();
   let dataProgress = [];
@@ -18,6 +19,13 @@ export default function ProgressDetailsMeals() {
   const errorMessage = 'Um erro inesperado ocorreu';
 
   const verifyElement = ({ target: { checked, id } }) => {
+    let allChecked = [];
+    const allChecks = document.getElementsByTagName('input', { type: 'checkbox' });
+    for (let i = 0; i < allChecks.length; i += 1) {
+      if (allChecks[i].checked) allChecked = [...allChecked, allChecks[i]];
+    }
+    if (allChecked.length === allChecks.length) setIsDone(true);
+    else setIsDone(false);
     if (checked) {
       setVerifiedElements([...verifiedElements, id]);
     }
@@ -195,6 +203,7 @@ export default function ProgressDetailsMeals() {
       <button
         type="button"
         data-testid="finish-recipe-btn"
+        disabled={ !isDone }
       >
         Recipe Finish
       </button>
