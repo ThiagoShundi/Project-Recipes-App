@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -141,6 +141,27 @@ export default function ProgressDetailsDrinks() {
     });
   }
 
+  const saveRecipe = () => {
+    // const dateDone = new Date();
+    let getDoneRecipes = localStorage
+      .getItem('doneRecipes') ? JSON
+        .parse(localStorage.getItem('doneRecipes')) : [];
+    const newDone = {
+      id: dataProgress[0].idDrink,
+      type: 'drink',
+      nationality: '',
+      category: dataProgress[0].strCategory,
+      alcoholicOrNot: dataProgress[0].strAlcoholic,
+      name: dataProgress[0].strDrink,
+      image: dataProgress[0].strDrinkThumb,
+      doneDate: new Date().toISOString(),
+      // doneDate: `${dateDone.getDate()}/${dateDone.getMonth()}/${dateDone.getFullYear()}`,
+      tags: [],
+    };
+    getDoneRecipes = [...getDoneRecipes, newDone];
+    localStorage.setItem('doneRecipes', JSON.stringify(getDoneRecipes));
+  };
+
   return (
     <div>
       <h1>ProgressDrinks</h1>
@@ -202,13 +223,16 @@ export default function ProgressDetailsDrinks() {
       >
         <img src={ isFavorite ? blackHeartIcon : whiteHeartIcon } alt="heart" />
       </button>
-      <button
-        type="button"
-        data-testid="finish-recipe-btn"
-        disabled={ !isDone }
-      >
-        Recipe Finish
-      </button>
+      <Link to="/done-recipes">
+        <button
+          type="button"
+          data-testid="finish-recipe-btn"
+          disabled={ !isDone }
+          onClick={ saveRecipe }
+        >
+          Recipe Finish
+        </button>
+      </Link>
     </div>
   );
 }
