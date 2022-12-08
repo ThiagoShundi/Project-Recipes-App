@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { fetchDrinks } from '../services/fetchRecipes';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/ProgressDetails.css';
 
 export default function ProgressDetailsDrinks() {
@@ -8,6 +10,8 @@ export default function ProgressDetailsDrinks() {
   const [dataDrinksInProgress, setDataDrinksInProgress] = useState([]);
   const [btnShare, setBtnShare] = useState(false);
   const [verifiedElements, setVerifiedElements] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isDone, setIsDone] = useState(false);
 
   const location = useLocation();
   let dataProgress = [];
@@ -15,13 +19,14 @@ export default function ProgressDetailsDrinks() {
 
   const errorMessage = 'Um erro inesperado ocorreu';
 
-  console.log(verifiedElements);
-
-  useEffect(() => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
-  }, [verifiedElements]);
-
   const verifyElement = ({ target: { checked, id } }) => {
+    let allChecked = [];
+    const allChecks = document.getElementsByTagName('input', { type: 'checkbox' });
+    for (let i = 0; i < allChecks.length; i += 1) {
+      if (allChecks[i].checked) allChecked = [...allChecked, allChecks[i]];
+    }
+    if (allChecked.length === allChecks.length) setIsDone(true);
+    else setIsDone(false);
     if (checked) {
       setVerifiedElements([...verifiedElements, id]);
     }
@@ -31,6 +36,11 @@ export default function ProgressDetailsDrinks() {
   };
 
   useEffect(() => {
+    const local = localStorage.getItem('inProgressRecipes');
+    if (local !== null) {
+      setVerifiedElements(JSON.parse(local));
+    }
+
     let recipe = {};
     const oito = 8;
 
@@ -51,33 +61,62 @@ export default function ProgressDetailsDrinks() {
       .then((response) => setDataDrinksInProgress(response.drinks))
       .catch(() => console.log(errorMessage))
       .finally(() => setIsLoading(false));
+
+    const getFavoritesLocalStorage = localStorage
+      .getItem('favoriteRecipes') ? JSON
+        .parse(localStorage.getItem('favoriteRecipes')) : [];
+
+    if (getFavoritesLocalStorage.length > 0) {
+      const keysDrinks = getFavoritesLocalStorage
+        .filter((favorite) => favorite.type === 'drink');
+      if (keysDrinks.length > 0) {
+        const isFav = keysDrinks.find((drink) => drink.id === id);
+        setIsFavorite(isFav);
+      }
+    }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (verifiedElements.length > 0) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
+    }
+  }, [verifiedElements]);
 
   const linkCopied = () => {
     const mil = 1000;
     setBtnShare(true);
-    navigator.clipboard.writeText(`http://localhost:3000${location.pathname}`);
+    const inProg = location.pathname.indexOf('/in-progress');
+    navigator.clipboard.writeText(`http://localhost:3000${location.pathname.slice(0, inProg)}`);
     setTimeout(() => {
       setBtnShare(false);
     }, mil);
   };
 
-  const outro = () => {
+  const favorite = () => {
+    const oito = 8;
+    const ids = location.pathname.slice(oito);
+    const numberCut = ids.indexOf('/');
+    const id = ids.slice(0, numberCut);
     const getFavoritesLocalStorage = localStorage
       .getItem('favoriteRecipes') ? JSON
         .parse(localStorage.getItem('favoriteRecipes')) : [];
-    // console.log(getFavoritesLocalStorage);
     const newFavorite = {};
-    if (dataDrinksInProgress.length > 0) {
-      newFavorite.id = dataDrinks[0].idDrink;
+    let allFavorites = [];
+    if (isFavorite) {
+      allFavorites = getFavoritesLocalStorage.filter((getFav) => getFav.id !== id);
+      setIsFavorite(false);
+    }
+    if ((dataDrinksInProgress.length > 0) && !isFavorite) {
+      newFavorite.id = dataDrinksInProgress[0].idDrink;
       newFavorite.type = 'drink';
       newFavorite.nationality = '';
-      newFavorite.category = dataDrinks[0].strCategory;
-      newFavorite.alcoholicOrNot = dataDrinks[0].strAlcoholic;
-      newFavorite.name = dataDrinks[0].strDrink;
-      newFavorite.image = dataDrinks[0].strDrinkThumb;
+      newFavorite.category = dataDrinksInProgress[0].strCategory;
+      newFavorite.alcoholicOrNot = dataDrinksInProgress[0].strAlcoholic;
+      newFavorite.name = dataDrinksInProgress[0].strDrink;
+      newFavorite.image = dataDrinksInProgress[0].strDrinkThumb;
+      setIsFavorite(true);
+      allFavorites = [...getFavoritesLocalStorage, newFavorite];
     }
-    const allFavorites = [...getFavoritesLocalStorage, newFavorite];
     localStorage.setItem('favoriteRecipes', JSON.stringify(allFavorites));
   };
 
@@ -101,6 +140,27 @@ export default function ProgressDetailsDrinks() {
       ingredients = [...ingredients, newValue];
     });
   }
+
+  const saveRecipe = () => {
+    // const dateDone = new Date();
+    let getDoneRecipes = localStorage
+      .getItem('doneRecipes') ? JSON
+        .parse(localStorage.getItem('doneRecipes')) : [];
+    const newDone = {
+      id: dataProgress[0].idDrink,
+      type: 'drink',
+      nationality: '',
+      category: dataProgress[0].strCategory,
+      alcoholicOrNot: dataProgress[0].strAlcoholic,
+      name: dataProgress[0].strDrink,
+      image: dataProgress[0].strDrinkThumb,
+      doneDate: new Date().toISOString(),
+      // doneDate: `${dateDone.getDate()}/${dateDone.getMonth()}/${dateDone.getFullYear()}`,
+      tags: [],
+    };
+    getDoneRecipes = [...getDoneRecipes, newDone];
+    localStorage.setItem('doneRecipes', JSON.stringify(getDoneRecipes));
+  };
 
   return (
     <div>
@@ -136,6 +196,8 @@ export default function ProgressDetailsDrinks() {
                     type="checkbox"
                     id={ ing }
                     name={ ing }
+                    defaultChecked={ verifiedElements
+                      .some((element) => element === ing) }
                   />
                   {ing}
                 </label>
@@ -153,13 +215,24 @@ export default function ProgressDetailsDrinks() {
         Share
       </button>
       {btnShare && <span>Link copied!</span>}
-      <button type="button" data-testid="favorite-btn" onClick={ outro }>Favorite</button>
       <button
         type="button"
-        data-testid="finish-recipe-btn"
+        data-testid="favorite-btn"
+        onClick={ favorite }
+        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
       >
-        Recipe Finish
+        <img src={ isFavorite ? blackHeartIcon : whiteHeartIcon } alt="heart" />
       </button>
+      <Link to="/done-recipes">
+        <button
+          type="button"
+          data-testid="finish-recipe-btn"
+          disabled={ !isDone }
+          onClick={ saveRecipe }
+        >
+          Recipe Finish
+        </button>
+      </Link>
     </div>
   );
 }

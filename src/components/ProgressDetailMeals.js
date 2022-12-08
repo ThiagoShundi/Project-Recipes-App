@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { fetchMeals } from '../services/fetchRecipes';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 export default function ProgressDetailsMeals() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataMealsInProgress, setDataMealsInProgress] = useState([]);
   const [btnShare, setBtnShare] = useState(false);
   const [verifiedElements, setVerifiedElements] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isDone, setIsDone] = useState(false);
 
   const location = useLocation();
   let dataProgress = [];
   let ingredients = [];
-  const a = '';
+  let a = '';
   const errorMessage = 'Um erro inesperado ocorreu';
 
-  useEffect(() => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
-  }, [verifiedElements]);
-
   const verifyElement = ({ target: { checked, id } }) => {
+    let allChecked = [];
+    const allChecks = document.getElementsByTagName('input', { type: 'checkbox' });
+    for (let i = 0; i < allChecks.length; i += 1) {
+      if (allChecks[i].checked) allChecked = [...allChecked, allChecks[i]];
+    }
+    if (allChecked.length === allChecks.length) setIsDone(true);
+    else setIsDone(false);
     if (checked) {
       setVerifiedElements([...verifiedElements, id]);
     }
@@ -28,6 +35,10 @@ export default function ProgressDetailsMeals() {
   };
 
   useEffect(() => {
+    const local = localStorage.getItem('inProgressRecipes');
+    if (local !== null) {
+      setVerifiedElements(JSON.parse(local));
+    }
     let recipe = {};
     const sete = 7;
 
@@ -48,38 +59,71 @@ export default function ProgressDetailsMeals() {
       .then((response) => setDataMealsInProgress(response.meals))
       .catch(() => console.log(errorMessage))
       .finally(() => setIsLoading(false));
+
+    const getFavoritesLocalStorage = localStorage
+      .getItem('favoriteRecipes') ? JSON
+        .parse(localStorage.getItem('favoriteRecipes')) : [];
+
+    if (getFavoritesLocalStorage.length > 0) {
+      const keysMeals = getFavoritesLocalStorage
+        .filter((favorite) => favorite.type === 'meal');
+      if (keysMeals.length > 0) {
+        const isFav = keysMeals.find((meal) => meal.id === id);
+        console.log(isFav);
+        setIsFavorite(isFav);
+      }
+    }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (verifiedElements.length > 0) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
+    }
+  }, [verifiedElements]);
 
   const linkCopied = () => {
     const mil = 1000;
     setBtnShare(true);
-    navigator.clipboard.writeText(`http://localhost:3000${location.pathname}`);
+    const inProg = location.pathname.indexOf('/in-progress');
+    navigator.clipboard.writeText(`http://localhost:3000${location.pathname.slice(0, inProg)}`);
     setTimeout(() => {
       setBtnShare(false);
     }, mil);
   };
 
-  const outro = () => {
+  const favorite = () => {
+    const sete = 7;
+    const ids = location.pathname.slice(sete);
+    const numberCut = ids.indexOf('/');
+    const id = ids.slice(0, numberCut);
     const getFavoritesLocalStorage = localStorage
       .getItem('favoriteRecipes') ? JSON
         .parse(localStorage.getItem('favoriteRecipes')) : [];
-    // console.log(getFavoritesLocalStorage);
     const newFavorite = {};
-    if (dataMealsInProgress.length > 0) {
-      newFavorite.id = dataMeals[0].idMeal;
-      newFavorite.type = 'meal';
-      newFavorite.nationality = dataMeals[0].strArea;
-      newFavorite.category = dataMeals[0].strCategory;
-      newFavorite.alcoholicOrNot = '';
-      newFavorite.name = dataMeals[0].strMeal;
-      newFavorite.image = dataMeals[0].strMealThumb;
+    let allFavorites = [];
+    console.log(isFavorite);
+    if (isFavorite) {
+      allFavorites = getFavoritesLocalStorage.filter((getFav) => getFav.id !== id);
+      setIsFavorite(false);
     }
-    const allFavorites = [...getFavoritesLocalStorage, newFavorite];
+    if ((dataMealsInProgress.length > 0) && !isFavorite) {
+      newFavorite.id = dataMealsInProgress[0].idMeal;
+      newFavorite.type = 'meal';
+      newFavorite.nationality = dataMealsInProgress[0].strArea;
+      newFavorite.category = dataMealsInProgress[0].strCategory;
+      newFavorite.alcoholicOrNot = '';
+      newFavorite.name = dataMealsInProgress[0].strMeal;
+      newFavorite.image = dataMealsInProgress[0].strMealThumb;
+      setIsFavorite(true);
+      allFavorites = [...getFavoritesLocalStorage, newFavorite];
+    }
     localStorage.setItem('favoriteRecipes', JSON.stringify(allFavorites));
   };
 
   if (dataMealsInProgress.length > 0) {
     dataProgress = dataMealsInProgress;
+    const ytVideo = dataProgress[0].strYoutube;
+    a = ytVideo.replace('watch?v=', 'embed/');
     const keysData = Object.keys(dataMealsInProgress[0]);
     const ingredientsFilter = keysData.filter((key) => key.includes('strIngredient'));
     const meansureFilter = keysData.filter((key) => key.includes('strMeasure'));
@@ -97,6 +141,28 @@ export default function ProgressDetailsMeals() {
       ingredients = [...ingredients, newValue];
     });
   }
+
+  const saveRecipe = () => {
+    const tags = dataProgress[0].strTags.split(',');
+    // const dateDone = new Date().toISOString();
+    let getDoneRecipes = localStorage
+      .getItem('doneRecipes') ? JSON
+        .parse(localStorage.getItem('doneRecipes')) : [];
+    const newDone = {
+      id: dataProgress[0].idMeal,
+      type: 'meal',
+      nationality: dataProgress[0].strArea,
+      category: dataProgress[0].strCategory,
+      alcoholicOrNot: '',
+      name: dataProgress[0].strMeal,
+      image: dataProgress[0].strMealThumb,
+      doneDate: new Date().toISOString(),
+      // doneDate: `${dateDone.getDate()}/${dateDone.getMonth()}/${dateDone.getFullYear()}`,
+      tags,
+    };
+    getDoneRecipes = [...getDoneRecipes, newDone];
+    localStorage.setItem('doneRecipes', JSON.stringify(getDoneRecipes));
+  };
 
   return (
     <div>
@@ -130,6 +196,8 @@ export default function ProgressDetailsMeals() {
                     type="checkbox"
                     id={ ing }
                     name={ ing }
+                    defaultChecked={ verifiedElements
+                      .some((element) => element === ing) }
                   />
                   {ing}
                 </label>
@@ -148,13 +216,24 @@ export default function ProgressDetailsMeals() {
         Share
       </button>
       {btnShare && <span>Link copied!</span>}
-      <button type="button" data-testid="favorite-btn" onClick={ outro }>Favorite</button>
       <button
         type="button"
-        data-testid="finish-recipe-btn"
+        data-testid="favorite-btn"
+        onClick={ favorite }
+        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
       >
-        Recipe Finish
+        <img src={ !isFavorite ? blackHeartIcon : whiteHeartIcon } alt="heart" />
       </button>
+      <Link to="/done-recipes">
+        <button
+          type="button"
+          data-testid="finish-recipe-btn"
+          disabled={ !isDone }
+          onClick={ saveRecipe }
+        >
+          Recipe Finish
+        </button>
+      </Link>
     </div>
   );
 }
