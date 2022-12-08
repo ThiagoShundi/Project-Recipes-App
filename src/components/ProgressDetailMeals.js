@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchMeals } from '../services/fetchRecipes';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 export default function ProgressDetailsMeals() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataMealsInProgress, setDataMealsInProgress] = useState([]);
   const [btnShare, setBtnShare] = useState(false);
   const [verifiedElements, setVerifiedElements] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const location = useLocation();
   let dataProgress = [];
@@ -48,11 +51,24 @@ export default function ProgressDetailsMeals() {
       .then((response) => setDataMealsInProgress(response.meals))
       .catch(() => console.log(errorMessage))
       .finally(() => setIsLoading(false));
+
+    const getFavoritesLocalStorage = localStorage
+      .getItem('favoriteRecipes') ? JSON
+        .parse(localStorage.getItem('favoriteRecipes')) : [];
+
+    if (getFavoritesLocalStorage.length > 0) {
+      const keysMeals = getFavoritesLocalStorage
+        .filter((favorite) => favorite.type === 'meal');
+      if (keysMeals.length > 0) {
+        const isFav = keysMeals.find((meal) => meal.id === id);
+        console.log(isFav);
+        setIsFavorite(isFav);
+      }
+    }
   }, [location.pathname]);
 
   useEffect(() => {
     if (verifiedElements.length > 0) {
-      console.log(verifiedElements);
       localStorage.setItem('inProgressRecipes', JSON.stringify(verifiedElements));
     }
   }, [verifiedElements]);
@@ -60,28 +76,39 @@ export default function ProgressDetailsMeals() {
   const linkCopied = () => {
     const mil = 1000;
     setBtnShare(true);
-    navigator.clipboard.writeText(`http://localhost:3000${location.pathname}`);
+    const inProg = location.pathname.indexOf('/in-progress');
+    navigator.clipboard.writeText(`http://localhost:3000${location.pathname.slice(0, inProg)}`);
     setTimeout(() => {
       setBtnShare(false);
     }, mil);
   };
 
-  const outro = () => {
+  const favorite = () => {
+    const sete = 7;
+    const ids = location.pathname.slice(sete);
+    const numberCut = ids.indexOf('/');
+    const id = ids.slice(0, numberCut);
     const getFavoritesLocalStorage = localStorage
       .getItem('favoriteRecipes') ? JSON
         .parse(localStorage.getItem('favoriteRecipes')) : [];
-    // console.log(getFavoritesLocalStorage);
     const newFavorite = {};
-    if (dataMealsInProgress.length > 0) {
-      newFavorite.id = dataMeals[0].idMeal;
-      newFavorite.type = 'meal';
-      newFavorite.nationality = dataMeals[0].strArea;
-      newFavorite.category = dataMeals[0].strCategory;
-      newFavorite.alcoholicOrNot = '';
-      newFavorite.name = dataMeals[0].strMeal;
-      newFavorite.image = dataMeals[0].strMealThumb;
+    let allFavorites = [];
+    console.log(isFavorite);
+    if (isFavorite) {
+      allFavorites = getFavoritesLocalStorage.filter((getFav) => getFav.id !== id);
+      setIsFavorite(false);
     }
-    const allFavorites = [...getFavoritesLocalStorage, newFavorite];
+    if ((dataMealsInProgress.length > 0) && !isFavorite) {
+      newFavorite.id = dataMealsInProgress[0].idMeal;
+      newFavorite.type = 'meal';
+      newFavorite.nationality = dataMealsInProgress[0].strArea;
+      newFavorite.category = dataMealsInProgress[0].strCategory;
+      newFavorite.alcoholicOrNot = '';
+      newFavorite.name = dataMealsInProgress[0].strMeal;
+      newFavorite.image = dataMealsInProgress[0].strMealThumb;
+      setIsFavorite(true);
+      allFavorites = [...getFavoritesLocalStorage, newFavorite];
+    }
     localStorage.setItem('favoriteRecipes', JSON.stringify(allFavorites));
   };
 
@@ -137,7 +164,7 @@ export default function ProgressDetailsMeals() {
                     type="checkbox"
                     id={ ing }
                     name={ ing }
-                    checked={ verifiedElements
+                    defaultChecked={ verifiedElements
                       .some((element) => element === ing) }
                   />
                   {ing}
@@ -157,7 +184,14 @@ export default function ProgressDetailsMeals() {
         Share
       </button>
       {btnShare && <span>Link copied!</span>}
-      <button type="button" data-testid="favorite-btn" onClick={ outro }>Favorite</button>
+      <button
+        type="button"
+        data-testid="favorite-btn"
+        onClick={ favorite }
+        src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+      >
+        <img src={ !isFavorite ? blackHeartIcon : whiteHeartIcon } alt="heart" />
+      </button>
       <button
         type="button"
         data-testid="finish-recipe-btn"
