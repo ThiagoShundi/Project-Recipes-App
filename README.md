@@ -1,13 +1,14 @@
-<h1> Aplicativo de Receitas </h1>
+<h1> Recipes APP </h1>
 
-<h2> Sobre o projeto </h2>
+<h2> About the project </h2>
 
 <div> 
-Este projeto foi desenvolvido no curso de front-end, com a proposta de ser um app de receitas, onde é possível consultar as receitas diversas entre pratos e bebidas.Foi utilizado o local storage do navegador para manter as informações de login, favoritos, e receitas iniciadas e concluídas.
+
+This project was developed in the front-end course, with the proposal of being a recipe app, where it is possible to consult the different recipes between dishes and drinks. The local storage of the browser was used to keep the login information, favorites, and Started and completed recipes.
 
 </div> 
 
-<h2> Avaliação do Projeto </h2>
+<h2> Project Evaluation </h2>
 
 <img src="images/avaliacao.png"/>
 
@@ -17,9 +18,9 @@ Este projeto foi desenvolvido no curso de front-end, com a proposta de ser um ap
 
 <img src="images/drinks.png"/>
 
-<h2>Contato </h2>
+<h2>Contact </h2>
 
-<p> Para mais informações entre em contato: </p>
+<p> For more information contact us: </p>
 
 <div>
 <a href="https://www.linkedin.com/in/thiago-hayashi-037732109/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
