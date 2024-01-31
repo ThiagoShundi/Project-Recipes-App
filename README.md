@@ -10,20 +10,18 @@ This project was developed in the front-end course, with the proposal of being a
 
 <h2> Skills </h2>
 
-<list> 
+<ul> 
 
-Use the React, HTML, CSS to create the pages;
-Use the React Context API to manage state;
-Using the React Hook useState;
-Using the React Hook useContext;
-Using the React Hook useEffect;
-Create custom Hooks
+<li>Use the React, HTML, CSS to create the pages;</li>
+<li>Use the React Context API to manage state;</li>
+<li>Using the React Hook useState;</li>
+<li>Using the React Hook useContext;</li>
+<li>Using the React Hook useEffect;</li>
+<li>Create custom Hooks</li>
 
-</list> 
+</ul> 
 
 <h2> Project Evaluation </h2>
-
-<img src="images/avaliacao.png"/>
 
 <img src="images/login.png"/>
 
